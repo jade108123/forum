@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>論壇</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:      #e8e6e3;
+  --ink-soft: #a8a49f;
+  --ink-faint:#5a5855;
+  --paper:    #1e1e1e;
+  --surface:  #252525;
+  --surface2: #2c2c2c;
+  --line:     #333;
+  --accent:   #c4a882;
+  --accent-l: #8a7560;
+  --red:      #c47070;
+  --green:    #6aaa85;
+  --tag-bg:   #2a2420;
+  --radius:   6px;
+}
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── 頂欄 ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  color: var(--accent);
+}
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.nickname-display {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.nickname-display span {
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline dotted;
+}
+
+/* ── 按鈕 ── */
+button {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  padding: 7px 16px;
+  transition: opacity .15s, transform .1s;
+  letter-spacing: .03em;
+}
+button:active { transform: scale(.97); }
+.btn-primary { background: var(--accent); color: #1a1208; font-weight: 500; }
+.btn-primary:hover { opacity: .85; }
+.btn-primary:disabled { opacity: .4; cursor: default; }
+.btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--ink-faint); color: var(--ink); }
+.btn-danger { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); font-size: 11px; padding: 3px 8px; }
+.btn-danger:hover { color: var(--red); border-color: var(--red); }
+.btn-back { background: transparent; color: var(--accent); border: none; padding: 0; font-size: 13px; }
+.btn-back:hover { opacity: .7; }
+
+/* ── 分類欄 ── */
+.category-bar {
+  display: flex;
+  gap: 4px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.category-bar::-webkit-scrollbar { display: none; }
+.cat-btn {
+  padding: 5px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.cat-btn.active {
+  background: var(--accent);
+  color: #1a1208;
+  border-color: var(--accent);
+  font-weight: 500;
+}
+.cat-btn:hover:not(.active) { border-color: var(--ink-faint); color: var(--ink); }
+
+/* ── 主內容 ── */
+.main { padding: 0 20px 40px; }
+
+/* ── 文章列表 ── */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 12px;
+}
+.list-count { font-size: 12px; color: var(--ink-faint); }
+
+.post-list { display: flex; flex-direction: column; }
+.post-card {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background .15s;
+  animation: fadeIn .2s ease;
+}
+.post-card:hover .post-title { color: var(--accent); }
+.post-card:last-child { border-bottom: none; }
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.post-category {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: var(--tag-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent-l);
+}
+.post-author { font-size: 12px; color: var(--ink-soft); }
+.post-time   { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
+
+.post-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 6px;
+  transition: color .15s;
+}
+.post-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.post-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--surface2);
+  color: var(--ink-faint);
+}
+.reply-count { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
+
+/* ── 單篇文章 ── */
+.post-view { animation: fadeIn .2s ease; }
+.post-view-header {
+  padding: 18px 0 14px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
+}
+.post-view-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 10px 0 10px;
+  line-height: 1.5;
+}
+.post-view-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.post-view-body {
+  font-size: 14px;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.9;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── 回覆 ── */
+.replies-section { margin-top: 24px; }
+.replies-title {
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: .06em;
+  margin-bottom: 12px;
+}
+.reply-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  animation: fadeIn .2s ease;
+}
+.reply-item:last-child { border-bottom: none; }
+.reply-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.reply-author { font-size: 13px; font-weight: 500; }
+.reply-time   { font-size: 11px; color: var(--ink-faint); flex: 1; }
+.reply-body   { font-size: 13px; color: var(--ink-soft); white-space: pre-wrap; word-break: break-word; }
+
+/* ── 表單 ── */
+.form-section {
+  margin-top: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.form-section h3 {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 400;
+  font-size: 15px;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+.form-row { margin-bottom: 12px; }
+.form-label {
+  display: block;
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.form-two-col { display: flex; gap: 10px; }
+.form-two-col > * { flex: 1; }
+input[type="text"], textarea, select {
+  width: 100%;
+  background: #181818;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 9px 12px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+  resize: none;
+}
+select { cursor: pointer; }
+input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
+.char-counter { text-align: right; font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
+.char-counter.warn { color: var(--red); }
+.form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+
+/* ── 暱稱 Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  animation: fadeIn .15s ease;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 28px 24px;
+  width: 320px;
+  max-width: 90vw;
+}
+.modal h3 {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.modal p { font-size: 12px; color: var(--ink-soft); margin-bottom: 12px; }
+
+/* ── Toast ── */
+.toast {
+  font-size: 12px; padding: 7px 14px;
+  border-radius: var(--radius); margin-top: 10px; display: none;
+}
+.toast.error   { background: #2e1f1f; color: var(--red);   border: 1px solid #5a3030; }
+.toast.success { background: #1a2e22; color: var(--green); border: 1px solid #2e5a3e; }
+.toast.show    { display: block; }
+
+/* ── 空狀態 / 載入 ── */
+.empty-state { text-align: center; padding: 40px 0; color: var(--ink-faint); font-size: 13px; }
+.loading     { text-align: center; padding: 24px; color: var(--ink-faint); font-size: 12px; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 刪除確認 ── */
+.del-confirm { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--red); }
+.btn-confirm-yes { background: var(--red); color: #fff; padding: 2px 8px; font-size: 11px; }
+.btn-confirm-no  { background: transparent; border: 1px solid var(--line); color: var(--ink-soft); padding: 2px 8px; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<script>
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
+</script>
+
+<!-- 頂欄 -->
+<div class="topbar">
+  <div class="topbar-title">論壇</div>
+  <div class="topbar-right">
+    <div class="nickname-display" id="nicknameDisplay"></div>
+    <button class="btn-ghost" onclick="openNicknameModal()">設定暱稱</button>
+  </div>
+</div>
+
+<!-- 主體（列表 / 文章 切換） -->
+<div id="listView">
+  <div class="category-bar" id="categoryBar">
+    <button class="cat-btn active" data-cat="" onclick="selectCategory(this, '')">全部</button>
+  </div>
+  <div class="main">
+    <div class="list-header">
+      <span class="list-count" id="listCount"></span>
+      <button class="btn-primary" onclick="openNewPostForm()">＋ 發文</button>
+    </div>
+    <div class="post-list" id="postList">
+      <div class="loading">載入中…</div>
+    </div>
+  </div>
+</div>
+
+<div id="postView" style="display:none;">
+  <div class="main" id="postViewContent"></div>
+</div>
+
+<!-- 暱稱 Modal -->
+<div class="modal-overlay" id="nicknameModal" style="display:none;">
+  <div class="modal">
+    <h3>設定你的暱稱</h3>
+    <p>暱稱會存在你的瀏覽器裡，不需要註冊帳號。</p>
+    <div class="form-row">
+      <input type="text" id="nicknameInput" placeholder="輸入暱稱（最多 20 字）" maxlength="20">
+    </div>
+    <div id="nicknameToast" class="toast"></div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="closeNicknameModal()">取消</button>
+      <button class="btn-primary" onclick="saveNickname()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── 狀態 ──
+let nickname = localStorage.getItem('forum_nickname') || '';
+let currentCategory = '';
+let currentPostId = null;
+let categories = [];
+
+// ── 工具 ──
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmt(iso) {
+  const d = new Date(iso), p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function showToast(id, msg, type) {
+  const el = document.getElementById(id);
+  el.textContent = msg; el.className = `toast ${type} show`;
+  setTimeout(() => el.className = 'toast', 2800);
+}
+function api(params) {
+  return fetch(`${SCRIPT_URL}?${new URLSearchParams(params)}`).then(r => r.json());
+}
+
+// ── 暱稱 ──
+function updateNicknameDisplay() {
+  const el = document.getElementById('nicknameDisplay');
+  el.innerHTML = nickname
+    ? `你好，<span onclick="openNicknameModal()">${esc(nickname)}</span>`
+    : '';
+}
+function openNicknameModal() {
+  document.getElementById('nicknameInput').value = nickname;
+  document.getElementById('nicknameModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('nicknameInput').focus(), 50);
+}
+function closeNicknameModal() {
+  document.getElementById('nicknameModal').style.display = 'none';
+}
+function saveNickname() {
+  const val = document.getElementById('nicknameInput').value.trim();
+  if (!val) return showToast('nicknameToast', '請填寫暱稱', 'error');
+  nickname = val;
+  localStorage.setItem('forum_nickname', nickname);
+  updateNicknameDisplay();
+  closeNicknameModal();
+}
+document.getElementById('nicknameModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeNicknameModal();
+});
+document.getElementById('nicknameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') saveNickname();
+});
+
+// ── 分類 ──
+async function loadCategories() {
+  const data = await api({ action: 'getCategories' });
+  if (!data.success) return;
+  categories = data.categories;
+  const bar = document.getElementById('categoryBar');
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.dataset.cat = cat;
+    btn.textContent = cat;
+    btn.onclick = () => selectCategory(btn, cat);
+    bar.appendChild(btn);
+  });
+}
+function selectCategory(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCategory = cat;
+  loadPosts();
+}
+
+// ── 文章列表 ──
+async function loadPosts() {
+  document.getElementById('postList').innerHTML = '<div class="loading">載入中…</div>';
+  const data = await api({ action: 'getPosts', category: currentCategory });
+  if (!data.success) {
+    document.getElementById('postList').innerHTML = '<div class="empty-state">載入失敗</div>';
+    return;
+  }
+  const posts = data.posts;
+  document.getElementById('listCount').textContent = posts.length ? `${posts.length} 篇文章` : '';
+  if (!posts.length) {
+    document.getElementById('postList').innerHTML = '<div class="empty-state">還沒有文章，來發第一篇吧</div>';
+    return;
+  }
+  document.getElementById('postList').innerHTML = posts.map(p => `
+    <div class="post-card" onclick="openPost('${esc(p.id)}')">
+      <div class="post-meta">
+        <span class="post-category">${esc(p.category)}</span>
+        <span class="post-author">${esc(p.author)}</span>
+        <span class="post-time">${fmt(p.timestamp)}</span>
+      </div>
+      <div class="post-title">${esc(p.title)}</div>
+      <div class="post-footer">
+        <div class="post-tags">${(p.tags||'').split(',').filter(Boolean).map(t =>
+          `<span class="tag">${esc(t.trim())}</span>`).join('')}</div>
+        <span class="reply-count">${p.replyCount ? `💬 ${p.replyCount}` : ''}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ── 發文表單 ──
+function openNewPostForm() {
+  if (!nickname) {
+    openNicknameModal();
+    return;
+  }
+  document.getElementById('listView').style.display = 'none';
+  document.getElementById('postView').style.display = 'block';
+  document.getElementById('postViewContent').innerHTML = `
+    <div class="post-view" style="padding-top:16px;">
+      <button class="btn-back" onclick="backToList()">← 返回列表</button>
+      <div class="form-section" style="margin-top:16px;">
+        <h3>發表新文章</h3>
+        <div class="form-two-col">
+          <div class="form-row">
+            <label class="form-label">分類</label>
+            <select id="newCategory">
+              ${categories.map(c => `<option>${esc(c)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-row">
+            <label class="form-label">標籤（逗號分隔）</label>
+            <input type="text" id="newTags" placeholder="例：心得, 問題">
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">標題</label>
+          <input type="text" id="newTitle" placeholder="文章標題（最多 50 字）" maxlength="50"
+            oninput="updateCounter('newTitleCounter', this.value.length, 50)">
+          <div class="char-counter" id="newTitleCounter">0 / 50</div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">內容</label>
+          <textarea id="newContent" style="min-height:140px;" placeholder="文章內容…" maxlength="2000"
+            oninput="updateCounter('newContentCounter', this.value.length, 2000)"></textarea>
+          <div class="char-counter" id="newContentCounter">0 / 2000</div>
+        </div>
+        <div id="newPostToast" class="toast"></div>
+        <div class="form-actions">
+          <button class="btn-ghost" onclick="backToList()">取消</button>
+          <button class="btn-primary" id="newPostSubmit" onclick="submitPost()">發表</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function updateCounter(id, len, max) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = `${len} / ${max}`;
+  el.className = `char-counter${len > max * .9 ? ' warn' : ''}`;
+}
+
+async function submitPost() {
+  const title   = document.getElementById('newTitle').value.trim();
+  const content = document.getElementById('newContent').value.trim();
+  const category = document.getElementById('newCategory').value;
+  const tags    = document.getElementById('newTags').value.trim();
+  const btn     = document.getElementById('newPostSubmit');
+
+  if (!title)   return showToast('newPostToast', '請填寫標題', 'error');
+  if (!content) return showToast('newPostToast', '請填寫內容', 'error');
+
+  btn.disabled = true; btn.textContent = '發表中…';
+  const data = await api({ action:'addPost', author: nickname, title, content, category, tags });
+  if (data.success) {
+    backToList();
+    await loadPosts();
+  } else {
+    showToast('newPostToast', data.error || '發表失敗', 'error');
+    btn.disabled = false; btn.textContent = '發表';
+  }
+}
+
+// ── 單篇文章 ──
+async function openPost(id) {
+  currentPostId = id;
+  document.getElementById('listView').style.display = 'none';
+  document.getElementById('postView').style.display = 'block';
+  document.getElementById('postViewContent').innerHTML = '<div class="loading" style="padding-top:24px;">載入中…</div>';
+
+  const data = await api({ action: 'getPost', id });
+  if (!data.success) {
+    document.getElementById('postViewContent').innerHTML = '<div class="empty-state">文章不存在</div>';
+    return;
+  }
+  const { post, replies } = data;
+  const tags = (post.tags||'').split(',').filter(Boolean);
+
+  document.getElementById('postViewContent').innerHTML = `
+    <div class="post-view">
+      <div class="post-view-header">
+        <button class="btn-back" onclick="backToList()">← 返回列表</button>
+        <div class="post-view-title">${esc(post.title)}</div>
+        <div class="post-view-meta">
+          <span class="post-category">${esc(post.category)}</span>
+          <span>${esc(post.author)}</span>
+          <span style="color:var(--ink-faint)">${fmt(post.timestamp)}</span>
+          ${tags.length ? `<div class="post-tags">${tags.map(t=>`<span class="tag">${esc(t.trim())}</span>`).join('')}</div>` : ''}
+          <span style="margin-left:auto;" id="postDelBtn">
+            <button class="btn-danger" onclick="confirmDeletePost('${esc(post.id)}')">刪除文章</button>
+          </span>
+        </div>
+      </div>
+      <div class="post-view-body">${esc(post.content)}</div>
+
+      <div class="replies-section">
+        <div class="replies-title">回覆 ${replies.length ? `· ${replies.length} 則` : ''}</div>
+        <div id="repliesList">
+          ${replies.length ? replies.map(r => renderReply(r)).join('') :
+            '<div class="empty-state" style="padding:20px 0;">還沒有回覆</div>'}
+        </div>
+      </div>
+
+      <div class="form-section" id="replyForm">
+        <h3>留下回覆</h3>
+        <div class="form-row">
+          <label class="form-label">內容</label>
+          <textarea id="replyContent" style="min-height:90px;" placeholder="寫下你的回覆…" maxlength="1000"
+            oninput="updateCounter('replyCounter', this.value.length, 1000)"></textarea>
+          <div class="char-counter" id="replyCounter">0 / 1000</div>
+        </div>
+        <div id="replyToast" class="toast"></div>
+        <div class="form-actions">
+          <button class="btn-primary" id="replySubmit" onclick="submitReply()">送出回覆</button>
+        </div>
+      </div>
+    </div>`;
+
+  if (!nickname) {
+    document.getElementById('replyForm').innerHTML =
+      `<div class="empty-state" style="padding:20px 0;">
+        <button class="btn-primary" onclick="openNicknameModal()">設定暱稱後即可回覆</button>
+      </div>`;
+  }
+}
+
+function renderReply(r) {
+  return `
+  <div class="reply-item" id="reply_${r.id}">
+    <div class="reply-meta">
+      <span class="reply-author">${esc(r.author)}</span>
+      <span class="reply-time">${fmt(r.timestamp)}</span>
+      <span id="replyDel_${r.id}">
+        <button class="btn-danger" onclick="confirmDeleteReply('${esc(r.id)}')">刪除</button>
+      </span>
+    </div>
+    <div class="reply-body">${esc(r.content)}</div>
+  </div>`;
+}
+
+async function submitReply() {
+  if (!nickname) return openNicknameModal();
+  const content = document.getElementById('replyContent').value.trim();
+  const btn = document.getElementById('replySubmit');
+  if (!content) return showToast('replyToast', '請填寫回覆內容', 'error');
+
+  btn.disabled = true; btn.textContent = '送出中…';
+  const data = await api({ action:'addReply', postId: currentPostId, author: nickname, content });
+  if (data.success) {
+    document.getElementById('replyContent').value = '';
+    updateCounter('replyCounter', 0, 1000);
+    await refreshReplies();
+    showToast('replyToast', '回覆成功！', 'success');
+  } else {
+    showToast('replyToast', data.error || '送出失敗', 'error');
+  }
+  btn.disabled = false; btn.textContent = '送出回覆';
+}
+
+async function refreshReplies() {
+  const data = await api({ action: 'getPost', id: currentPostId });
+  if (!data.success) return;
+  const { replies } = data;
+  document.getElementById('repliesList').innerHTML = replies.length
+    ? replies.map(r => renderReply(r)).join('')
+    : '<div class="empty-state" style="padding:20px 0;">還沒有回覆</div>';
+}
+
+// ── 刪除 ──
+function confirmDeletePost(id) {
+  document.getElementById('postDelBtn').innerHTML = `
+    <span class="del-confirm">確定刪除文章？
+      <button class="btn-confirm-yes" onclick="deletePost('${esc(id)}')">刪除</button>
+      <button class="btn-confirm-no" onclick="openPost('${esc(id)}')">取消</button>
+    </span>`;
+}
+async function deletePost(id) {
+  await api({ action:'deletePost', id });
+  backToList();
+  await loadPosts();
+}
+
+function confirmDeleteReply(id) {
+  document.getElementById(`replyDel_${id}`).innerHTML = `
+    <span class="del-confirm">確定？
+      <button class="btn-confirm-yes" onclick="deleteReply('${esc(id)}')">刪除</button>
+      <button class="btn-confirm-no" onclick="refreshReplies()">取消</button>
+    </span>`;
+}
+async function deleteReply(id) {
+  await api({ action:'deleteReply', id });
+  await refreshReplies();
+}
+
+// ── 導航 ──
+function backToList() {
+  currentPostId = null;
+  document.getElementById('postView').style.display = 'none';
+  document.getElementById('listView').style.display = 'block';
+}
+
+// ── 啟動 ──
+updateNicknameDisplay();
+loadCategories().then(() => loadPosts());
+</script>
+</body>
+</html>
