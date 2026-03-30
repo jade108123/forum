@@ -173,7 +173,11 @@ button:active { transform: scale(.97); }
   border-radius: 99px;
   background: var(--surface2);
   color: var(--ink-faint);
+  cursor: pointer;
+  transition: background .15s, color .15s;
 }
+.tag:hover { background: var(--tag-bg); color: var(--accent); }
+.tag.active { background: var(--tag-bg); color: var(--accent); border: 1px solid var(--accent-l); }
 .reply-count { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
 
 /* ── 單篇文章 ── */
@@ -349,6 +353,11 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
       <span class="list-count" id="listCount"></span>
       <button class="btn-primary" onclick="openNewPostForm()">＋ 發文</button>
     </div>
+    <div id="tagFilterBar" style="display:none; margin-bottom:12px;">
+      <span style="font-size:12px; color:var(--ink-soft);">標籤篩選：</span>
+      <span id="activeTagLabel" style="font-size:12px; color:var(--accent);"></span>
+      <button class="btn-ghost" style="padding:3px 10px; font-size:11px; margin-left:8px;" onclick="clearTagFilter()">✕ 清除</button>
+    </div>
     <div class="post-list" id="postList">
       <div class="loading">載入中…</div>
     </div>
@@ -379,9 +388,10 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
 // ── 狀態 ──
 let nickname = localStorage.getItem('forum_nickname') || '';
 let currentCategory = '';
+let currentTag = '';
 let currentPostId = null;
 let categories = [];
-
+let allPosts = [];
 // ── 工具 ──
 function esc(s) {
   return String(s||'')
@@ -461,13 +471,27 @@ async function loadPosts() {
     document.getElementById('postList').innerHTML = '<div class="empty-state">載入失敗</div>';
     return;
   }
-  const posts = data.posts;
+  allPosts = data.posts;
+  currentTag = '';
+  document.getElementById('tagFilterBar').style.display = 'none';
+  renderPostList();
+}
+
+function renderPostList() {
+  const posts = currentTag
+    ? allPosts.filter(p => (p.tags||'').split(',').map(t=>t.trim()).includes(currentTag))
+    : allPosts;
+
   document.getElementById('listCount').textContent = posts.length ? `${posts.length} 篇文章` : '';
+
   if (!posts.length) {
-    document.getElementById('postList').innerHTML = '<div class="empty-state">還沒有文章，來發第一篇吧</div>';
+    document.getElementById('postList').innerHTML =
+      `<div class="empty-state">${currentTag ? `沒有標籤「${esc(currentTag)}」的文章` : '還沒有文章，來發第一篇吧'}</div>`;
     return;
   }
-  document.getElementById('postList').innerHTML = posts.map(p => `
+  document.getElementById('postList').innerHTML = posts.map(p => {
+    const tags = (p.tags||'').split(',').filter(Boolean);
+    return `
     <div class="post-card" onclick="openPost('${esc(p.id)}')">
       <div class="post-meta">
         <span class="post-category">${esc(p.category)}</span>
@@ -476,11 +500,29 @@ async function loadPosts() {
       </div>
       <div class="post-title">${esc(p.title)}</div>
       <div class="post-footer">
-        <div class="post-tags">${(p.tags||'').split(',').filter(Boolean).map(t =>
-          `<span class="tag">${esc(t.trim())}</span>`).join('')}</div>
+        <div class="post-tags">${tags.map(t => {
+          const trimmed = t.trim();
+          const isActive = trimmed === currentTag;
+          return `<span class="tag${isActive ? ' active' : ''}"
+            onclick="event.stopPropagation(); selectTag('${esc(trimmed)}')">${esc(trimmed)}</span>`;
+        }).join('')}</div>
         <span class="reply-count">${p.replyCount ? `💬 ${p.replyCount}` : ''}</span>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
+}
+
+function selectTag(tag) {
+  currentTag = tag;
+  document.getElementById('tagFilterBar').style.display = 'block';
+  document.getElementById('activeTagLabel').textContent = tag;
+  renderPostList();
+}
+
+function clearTagFilter() {
+  currentTag = '';
+  document.getElementById('tagFilterBar').style.display = 'none';
+  renderPostList();
 }
 
 // ── 發文表單 ──
