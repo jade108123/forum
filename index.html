@@ -323,6 +323,9 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
 }
 
 /* ── 刪除確認 ── */
+.btn-mention { background: transparent; color: var(--ink-faint); border: 1px solid var(--line); font-size: 11px; padding: 3px 8px; }
+.btn-mention:hover { color: var(--accent); border-color: var(--accent-l); }
+.mention { color: var(--accent); font-weight: 500; }
 .del-confirm { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--red); }
 .btn-confirm-yes { background: var(--red); color: #fff; padding: 2px 8px; font-size: 11px; }
 .btn-confirm-no  { background: transparent; border: 1px solid var(--line); color: var(--ink-soft); padding: 2px 8px; font-size: 11px; }
@@ -668,12 +671,31 @@ function renderReply(r) {
     <div class="reply-meta">
       <span class="reply-author">${esc(r.author)}</span>
       <span class="reply-time">${fmt(r.timestamp)}</span>
+      <button class="btn-mention" onclick="mentionUser('${esc(r.author)}')">＠</button>
       <span id="replyDel_${r.id}">
         <button class="btn-danger" onclick="confirmDeleteReply('${esc(r.id)}')">刪除</button>
       </span>
     </div>
-    <div class="reply-body">${esc(r.content)}</div>
+    <div class="reply-body">${highlightMentions(esc(r.content))}</div>
   </div>`;
+}
+
+function highlightMentions(text) {
+  return text.replace(/@(\S+)/g, '<span class="mention">@$1</span>');
+}
+
+function mentionUser(author) {
+  if (!nickname) return openNicknameModal();
+  const textarea = document.getElementById('replyContent');
+  if (!textarea) return;
+  const mention = `@${author} `;
+  const pos = textarea.selectionStart;
+  const before = textarea.value.slice(0, pos);
+  const after = textarea.value.slice(pos);
+  textarea.value = before + mention + after;
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = pos + mention.length;
+  updateCounter('replyCounter', textarea.value.length, 1000);
 }
 
 async function submitReply() {
