@@ -103,10 +103,17 @@ button:active { transform: scale(.97); }
 .btn-primary:disabled { opacity: .3; cursor: default; }
 .btn-ghost { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.15); }
 .btn-ghost:hover { background: rgba(0,0,0,.48); color: var(--ink); }
-.btn-danger { background: transparent; color: var(--ink-faint); border: 1px solid rgba(255,255,255,.08); font-size: 11px; padding: 3px 8px; }
-.btn-danger:hover { color: var(--red); border-color: var(--red); }
-.btn-back { background: transparent; color: var(--ink-soft); border: none; padding: 0; font-size: 13px; }
-.btn-back:hover { color: var(--ink); }
+.btn-danger { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.1); font-size: 11px; padding: 3px 8px; }
+.btn-danger:hover { color: var(--red); border-color: var(--red); background: rgba(0,0,0,.45); }
+.btn-back {
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.15);
+  padding: 4px 12px;
+  font-size: 13px;
+  border-radius: var(--radius);
+}
+.btn-back:hover { background: rgba(0,0,0,.55); }
 
 /* ── 分類欄 ── */
 .category-bar {
@@ -215,18 +222,27 @@ button:active { transform: scale(.97); }
 .reply-count { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
 
 /* ── 單篇文章 ── */
-.post-view { animation: fadeIn .2s ease; }
+.post-view {
+  animation: fadeIn .2s ease;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.08);
+}
 .post-view-header {
-  padding: 18px 0 14px;
-  border-bottom: 1px solid var(--line);
+  padding: 0 0 14px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
   margin-bottom: 20px;
 }
 .post-view-title {
-  font-family: 'Noto Serif TC', serif;
+  font-family: 'GlowSans', 'Noto Serif TC', serif;
   font-size: 20px;
   font-weight: 400;
   margin: 10px 0 10px;
   line-height: 1.5;
+  color: #fff;
 }
 .post-view-meta {
   display: flex;
@@ -237,25 +253,25 @@ button:active { transform: scale(.97); }
 }
 .post-view-body {
   font-size: 14px;
-  color: var(--ink-soft);
+  color: var(--ink);
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.9;
   padding-bottom: 24px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255,255,255,.1);
 }
 
 /* ── 回覆 ── */
 .replies-section { margin-top: 24px; }
 .replies-title {
   font-size: 13px;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
   letter-spacing: .06em;
   margin-bottom: 12px;
 }
 .reply-item {
   padding: 14px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255,255,255,.08);
   animation: fadeIn .2s ease;
 }
 .reply-item:last-child { border-bottom: none; }
@@ -265,9 +281,9 @@ button:active { transform: scale(.97); }
   gap: 8px;
   margin-bottom: 5px;
 }
-.reply-author { font-size: 13px; font-weight: 500; }
-.reply-time   { font-size: 11px; color: var(--ink-faint); flex: 1; }
-.reply-body   { font-size: 13px; color: var(--ink-soft); white-space: pre-wrap; word-break: break-word; }
+.reply-author { font-size: 13px; font-weight: 500; color: #fff; }
+.reply-time   { font-size: 11px; color: var(--ink-soft); flex: 1; }
+.reply-body   { font-size: 13px; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
 
 /* ── 表單 ── */
 .form-section {
@@ -359,8 +375,8 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
 }
 
 /* ── 刪除確認 ── */
-.btn-mention { background: transparent; color: var(--ink-faint); border: 1px solid rgba(255,255,255,.08); font-size: 11px; padding: 3px 8px; }
-.btn-mention:hover { color: var(--ink); border-color: rgba(255,255,255,.2); }
+.btn-mention { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.1); font-size: 11px; padding: 3px 8px; }
+.btn-mention:hover { color: var(--ink); border-color: rgba(255,255,255,.2); background: rgba(0,0,0,.45); }
 .mention { color: var(--accent); font-weight: 500; }
 .del-confirm { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--red); }
 .btn-confirm-yes { background: var(--red); color: #fff; padding: 2px 8px; font-size: 11px; }
