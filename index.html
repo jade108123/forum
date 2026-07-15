@@ -34,8 +34,8 @@ body {
   font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
   background: var(--paper) url('Darkbackground.jpg') center center / cover fixed;
   color: var(--ink);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 17px;
+  line-height: 1.8;
   min-height: 100vh;
 }
 body::before {
@@ -147,7 +147,7 @@ button:active { transform: scale(.97); }
 .cat-btn:hover:not(.active) { background: rgba(0,0,0,.38); color: var(--ink); }
 
 /* ── 主內容 ── */
-.main { padding: 0 20px 40px; }
+.main { padding: 20px 20px 40px; }
 
 /* ── 文章列表 ── */
 .list-header {
@@ -156,7 +156,7 @@ button:active { transform: scale(.97); }
   align-items: center;
   padding: 16px 0 12px;
 }
-.list-count { font-size: 12px; color: var(--ink-faint); }
+.list-count { font-size: 14px; color: var(--ink-faint); }
 
 .post-list { display: flex; flex-direction: column; }
 .post-card {
@@ -190,10 +190,11 @@ button:active { transform: scale(.97); }
   color: var(--accent);
   border: 1px solid var(--accent-l);
 }
-.post-author { font-size: 12px; color: var(--ink-soft); }
-.post-time   { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
+.post-author { font-size: 14px; color: var(--ink-soft); }
+.post-time   { font-size: 13px; color: var(--ink-faint); margin-left: auto; }
 
 .post-title {
+  font-size: 17px;
   font-family: 'Noto Serif TC', serif;
   font-size: 15px;
   font-weight: 400;
@@ -223,6 +224,7 @@ button:active { transform: scale(.97); }
 
 /* ── 單篇文章 ── */
 .post-view {
+  margin-top: 20px;
   animation: fadeIn .2s ease;
   background: rgba(0,0,0,.5);
   backdrop-filter: blur(10px);
@@ -238,9 +240,9 @@ button:active { transform: scale(.97); }
 }
 .post-view-title {
   font-family: 'GlowSans', 'Noto Serif TC', serif;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 400;
-  margin: 10px 0 10px;
+  margin: 12px 0 12px;
   line-height: 1.5;
   color: #fff;
 }
@@ -252,7 +254,7 @@ button:active { transform: scale(.97); }
   color: var(--ink-soft);
 }
 .post-view-body {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--ink);
   white-space: pre-wrap;
   word-break: break-word;
@@ -264,7 +266,7 @@ button:active { transform: scale(.97); }
 /* ── 回覆 ── */
 .replies-section { margin-top: 24px; }
 .replies-title {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-soft);
   letter-spacing: .06em;
   margin-bottom: 12px;
@@ -281,9 +283,9 @@ button:active { transform: scale(.97); }
   gap: 8px;
   margin-bottom: 5px;
 }
-.reply-author { font-size: 13px; font-weight: 500; color: #fff; }
-.reply-time   { font-size: 11px; color: var(--ink-soft); flex: 1; }
-.reply-body   { font-size: 13px; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
+.reply-author { font-size: 15px; font-weight: 500; color: #fff; }
+.reply-time   { font-size: 13px; color: var(--ink-soft); flex: 1; }
+.reply-body   { font-size: 15px; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
 
 /* ── 表單 ── */
 .form-section {
