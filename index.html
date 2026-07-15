@@ -55,7 +55,7 @@ body::before {
   justify-content: space-between;
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
-  background: rgba(30,30,30,.75);
+  background: rgba(0,0,0,.5);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: sticky;
@@ -93,16 +93,16 @@ button {
 }
 button:active { transform: scale(.97); }
 .btn-primary {
-  background: rgba(255,255,255,.22);
+  background: rgba(0,0,0,.45);
   color: #fff;
-  border: 1px solid rgba(255,255,255,.38);
+  border: 1px solid rgba(255,255,255,.25);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.btn-primary:hover { background: rgba(255,255,255,.32); }
+.btn-primary:hover { background: rgba(0,0,0,.62); }
 .btn-primary:disabled { opacity: .3; cursor: default; }
-.btn-ghost { background: rgba(255,255,255,.08); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.2); }
-.btn-ghost:hover { background: rgba(255,255,255,.16); color: var(--ink); }
+.btn-ghost { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.15); }
+.btn-ghost:hover { background: rgba(0,0,0,.48); color: var(--ink); }
 .btn-danger { background: transparent; color: var(--ink-faint); border: 1px solid rgba(255,255,255,.08); font-size: 11px; padding: 3px 8px; }
 .btn-danger:hover { color: var(--red); border-color: var(--red); }
 .btn-back { background: transparent; color: var(--ink-soft); border: none; padding: 0; font-size: 13px; }
@@ -116,7 +116,7 @@ button:active { transform: scale(.97); }
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   scrollbar-width: none;
-  background: rgba(26,26,26,.6);
+  background: rgba(0,0,0,.4);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
@@ -125,19 +125,19 @@ button:active { transform: scale(.97); }
   padding: 5px 14px;
   border-radius: 99px;
   font-size: 12px;
-  background: transparent;
+  background: rgba(0,0,0,.25);
   color: var(--ink-soft);
-  border: 1px solid rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.12);
   white-space: nowrap;
 }
 .cat-btn.active {
-  background: rgba(255,255,255,.28);
+  background: rgba(0,0,0,.55);
   color: #fff;
-  border-color: rgba(255,255,255,.45);
+  border-color: rgba(255,255,255,.3);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
 }
-.cat-btn:hover:not(.active) { border-color: rgba(255,255,255,.2); color: var(--ink); }
+.cat-btn:hover:not(.active) { background: rgba(0,0,0,.38); color: var(--ink); }
 
 /* ── 主內容 ── */
 .main { padding: 0 20px 40px; }
@@ -158,10 +158,10 @@ button:active { transform: scale(.97); }
   cursor: pointer;
   transition: background .15s;
   animation: fadeIn .2s ease;
-  background: rgba(30,30,30,.45);
+  background: rgba(0,0,0,.35);
   padding: 16px;
   border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
   margin-bottom: 6px;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -272,8 +272,8 @@ button:active { transform: scale(.97); }
 /* ── 表單 ── */
 .form-section {
   margin-top: 28px;
-  background: rgba(37,37,37,.8);
-  border: 1px solid var(--line);
+  background: rgba(0,0,0,.45);
+  border: 1px solid rgba(255,255,255,.1);
   border-radius: var(--radius);
   padding: 20px;
   backdrop-filter: blur(8px);
