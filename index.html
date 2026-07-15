@@ -3,9 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>論壇</title>
+<title>VIRGOHI21</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
 <style>
+@font-face {
+  font-family: 'GlowSans';
+  src: url('GlowSansTC-Normal-Thin.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -25,8 +31,8 @@
 }
 
 body {
-  font-family: 'Noto Sans TC', sans-serif;
-  background: var(--paper);
+  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
+  background: var(--paper) url('Darkbackground.jpg') center center / cover fixed;
   color: var(--ink);
   font-size: 14px;
   line-height: 1.7;
@@ -40,17 +46,19 @@ body {
   justify-content: space-between;
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
-  background: var(--surface);
+  background: rgba(30,30,30,.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 .topbar-title {
-  font-family: 'Noto Serif TC', serif;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: .06em;
-  color: var(--accent);
+  font-family: 'GlowSans', 'Noto Serif TC', serif;
+  font-size: 18px;
+  font-weight: normal;
+  letter-spacing: .18em;
+  color: var(--ink);
 }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 .nickname-display {
@@ -93,6 +101,9 @@ button:active { transform: scale(.97); }
   border-bottom: 1px solid var(--line);
   overflow-x: auto;
   scrollbar-width: none;
+  background: rgba(26,26,26,.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .category-bar::-webkit-scrollbar { display: none; }
 .cat-btn {
@@ -131,6 +142,13 @@ button:active { transform: scale(.97); }
   cursor: pointer;
   transition: background .15s;
   animation: fadeIn .2s ease;
+  background: rgba(30,30,30,.45);
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 6px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 .post-card:hover .post-title { color: var(--accent); }
 .post-card:last-child { border-bottom: none; }
@@ -238,10 +256,12 @@ button:active { transform: scale(.97); }
 /* ── 表單 ── */
 .form-section {
   margin-top: 28px;
-  background: var(--surface);
+  background: rgba(37,37,37,.8);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 20px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .form-section h3 {
   font-family: 'Noto Serif TC', serif;
@@ -334,12 +354,12 @@ input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
 <body>
 
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
+  const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
 </script>
 
 <!-- 頂欄 -->
 <div class="topbar">
-  <div class="topbar-title">論壇</div>
+  <div class="topbar-title">VIRGOHI21</div>
   <div class="topbar-right">
     <div class="nickname-display" id="nicknameDisplay"></div>
     <button class="btn-ghost" onclick="openNicknameModal()">設定暱稱</button>
