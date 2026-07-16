@@ -4,818 +4,1003 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VIRGOHI21</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @font-face {
   font-family: 'GlowSans';
   src: url('GlowSansTC-Normal-Thin.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink:      #ffffff;
-  --ink-soft: #d0cdc9;
-  --ink-faint:#8a8884;
-  --paper:    #1e1e1e;
-  --surface:  #252525;
-  --surface2: #2c2c2c;
-  --line:     #333;
-  --accent:   #c4a882;
-  --accent-l: #8a7560;
-  --red:      #c47070;
-  --green:    #6aaa85;
-  --tag-bg:   #2a2420;
-  --radius:   6px;
+  --orange: #c05a3c;
+  --ink: #262422;
+  --ink-mid: rgba(38,36,34,.55);
+  --ink-soft: rgba(38,36,34,.45);
+  --ink-faint: rgba(38,36,34,.35);
+  --ink-line: rgba(38,36,34,.1);
+  --bg: rgba(240,238,233,.35);
+  --radius-pill: 999px;
 }
 
 body {
-  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
-  background: var(--paper) url('Darkbackground.jpg') center center / cover fixed;
-  color: var(--ink);
-  font-size: 17px;
-  line-height: 1.8;
-  min-height: 100vh;
-}
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(255,255,255,.18);
-  pointer-events: none;
-  z-index: 0;
-}
-.topbar, .category-bar, .main { position: relative; z-index: 1; }
-
-/* ── 頂欄 ── */
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(0,0,0,.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.topbar-title {
-  font-family: 'GlowSans', 'Noto Serif TC', serif;
-  font-size: 18px;
-  font-weight: normal;
-  letter-spacing: .18em;
-  color: var(--ink);
-}
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.nickname-display {
-  font-size: 12px;
-  color: var(--ink-soft);
-}
-.nickname-display span {
-  color: var(--accent);
-  cursor: pointer;
-  text-decoration: underline dotted;
-}
-
-/* ── 按鈕 ── */
-button {
   font-family: 'Noto Sans TC', sans-serif;
-  font-size: 12px;
-  border: none;
-  border-radius: var(--radius);
-  cursor: pointer;
-  padding: 7px 16px;
-  transition: all .15s;
-  letter-spacing: .06em;
-}
-button:active { transform: scale(.97); }
-.btn-primary {
-  background: rgba(0,0,0,.45);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.btn-primary:hover { background: rgba(0,0,0,.62); }
-.btn-primary:disabled { opacity: .3; cursor: default; }
-.btn-ghost { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.15); }
-.btn-ghost:hover { background: rgba(0,0,0,.48); color: var(--ink); }
-.btn-danger { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.1); font-size: 11px; padding: 3px 8px; }
-.btn-danger:hover { color: var(--red); border-color: var(--red); background: rgba(0,0,0,.45); }
-.btn-back {
-  background: rgba(0,0,0,.35);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.15);
-  padding: 4px 12px;
-  font-size: 13px;
-  border-radius: var(--radius);
-}
-.btn-back:hover { background: rgba(0,0,0,.55); }
-
-/* ── 分類欄 ── */
-.category-bar {
-  display: flex;
-  gap: 4px;
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--line);
-  overflow-x: auto;
-  scrollbar-width: none;
-  background: rgba(0,0,0,.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.category-bar::-webkit-scrollbar { display: none; }
-.cat-btn {
-  padding: 5px 14px;
-  border-radius: 99px;
-  font-size: 12px;
-  background: rgba(0,0,0,.25);
-  color: var(--ink-soft);
-  border: 1px solid rgba(255,255,255,.12);
-  white-space: nowrap;
-}
-.cat-btn.active {
-  background: rgba(0,0,0,.55);
-  color: #fff;
-  border-color: rgba(255,255,255,.3);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-.cat-btn:hover:not(.active) { background: rgba(0,0,0,.38); color: var(--ink); }
-
-/* ── 主內容 ── */
-.main { padding: 20px 20px 40px; }
-
-/* ── 文章列表 ── */
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 0 12px;
-}
-.list-count { font-size: 14px; color: var(--ink-faint); }
-
-.post-list { display: flex; flex-direction: column; }
-.post-card {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
-  cursor: pointer;
-  transition: background .15s;
-  animation: fadeIn .2s ease;
-  background: rgba(0,0,0,.35);
-  padding: 16px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,.08);
-  margin-bottom: 6px;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-.post-card:hover .post-title { color: var(--accent); }
-.post-card:last-child { border-bottom: none; }
-
-.post-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
-}
-.post-category {
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 99px;
-  background: var(--tag-bg);
-  color: var(--accent);
-  border: 1px solid var(--accent-l);
-}
-.post-author { font-size: 14px; color: var(--ink-soft); }
-.post-time   { font-size: 13px; color: var(--ink-faint); margin-left: auto; }
-
-.post-title {
-  font-size: 17px;
-  font-family: 'Noto Serif TC', serif;
-  font-size: 15px;
-  font-weight: 400;
+  background: #ede9e2 url('Darkbackground.jpg') center 15% / cover fixed;
   color: var(--ink);
-  margin-bottom: 6px;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+button { font-family: 'Noto Sans TC', sans-serif; cursor: pointer; border: none; background: none; padding: 0; }
+input, textarea { font-family: 'Noto Sans TC', sans-serif; }
+.vg-scroll::-webkit-scrollbar { display: none; }
+.vg-scroll { scrollbar-width: none; }
+
+/* ══ 桌面版 2a ══ */
+.desktop {
+  display: none;
+  height: 100vh;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .desktop { display: grid; grid-template-columns: 240px 1fr; }
+  .mobile  { display: none; }
+}
+
+/* 側邊欄 */
+.sidebar {
+  border-right: 1px solid var(--ink-line);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(240,238,233,.3);
+  height: 100vh;
+}
+.sidebar-logo {
+  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.sidebar-cats { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.sidebar-cat {
+  text-align: left;
+  padding: 9px 0;
+  font-size: 13px;
+  color: var(--ink-mid);
   transition: color .15s;
 }
-.post-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-.post-tags { display: flex; gap: 5px; flex-wrap: wrap; }
-.tag {
-  font-size: 10px;
-  padding: 1px 7px;
-  border-radius: 99px;
-  background: var(--surface2);
-  color: var(--ink-faint);
-  cursor: pointer;
-  transition: background .15s, color .15s;
-}
-.tag:hover { background: var(--tag-bg); color: var(--accent); }
-.tag.active { background: var(--tag-bg); color: var(--accent); border: 1px solid var(--accent-l); }
-.reply-count { font-size: 11px; color: var(--ink-faint); margin-left: auto; }
-
-/* ── 單篇文章 ── */
-.post-view {
-  margin-top: 20px;
-  animation: fadeIn .2s ease;
-  background: rgba(0,0,0,.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--radius);
-  padding: 20px;
-  border: 1px solid rgba(255,255,255,.08);
-}
-.post-view-header {
-  padding: 0 0 14px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
-  margin-bottom: 20px;
-}
-.post-view-title {
-  font-family: 'GlowSans', 'Noto Serif TC', serif;
-  font-size: 24px;
-  font-weight: 400;
-  margin: 12px 0 12px;
-  line-height: 1.5;
+.sidebar-cat.active { font-weight: 700; color: var(--orange); }
+.sidebar-cat:hover:not(.active) { color: var(--ink); }
+.sidebar-compose {
+  background: var(--orange);
   color: #fff;
-}
-.post-view-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  color: var(--ink-soft);
-}
-.post-view-body {
-  font-size: 16px;
-  color: var(--ink);
-  white-space: pre-wrap;
-  word-break: break-word;
-  line-height: 1.9;
-  padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255,255,255,.1);
-}
-
-/* ── 回覆 ── */
-.replies-section { margin-top: 24px; }
-.replies-title {
-  font-size: 15px;
-  color: var(--ink-soft);
-  letter-spacing: .06em;
-  margin-bottom: 12px;
-}
-.reply-item {
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255,255,255,.08);
-  animation: fadeIn .2s ease;
-}
-.reply-item:last-child { border-bottom: none; }
-.reply-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
-}
-.reply-author { font-size: 15px; font-weight: 500; color: #fff; }
-.reply-time   { font-size: 13px; color: var(--ink-soft); flex: 1; }
-.reply-body   { font-size: 15px; color: var(--ink); white-space: pre-wrap; word-break: break-word; }
-
-/* ── 表單 ── */
-.form-section {
-  margin-top: 28px;
-  background: rgba(0,0,0,.45);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: var(--radius);
-  padding: 20px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-.form-section h3 {
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 400;
-  font-size: 15px;
-  margin-bottom: 16px;
-  color: var(--ink);
-}
-.form-row { margin-bottom: 12px; }
-.form-label {
-  display: block;
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  margin-bottom: 5px;
-}
-.form-two-col { display: flex; gap: 10px; }
-.form-two-col > * { flex: 1; }
-input[type="text"], textarea, select {
+  padding: 11px 0;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
   width: 100%;
-  background: #181818;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 9px 12px;
-  font-family: 'Noto Sans TC', sans-serif;
+  transition: opacity .15s;
+}
+.sidebar-compose:hover { opacity: .85; }
+
+/* 桌面主欄 */
+.d-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+.d-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 40px 18px;
+  gap: 24px;
+}
+.d-search-input {
+  flex: 1;
+  max-width: 360px;
+  border: none;
+  border-bottom: 1px solid rgba(38,36,34,.2);
+  background: transparent;
+  padding: 6px 2px;
   font-size: 13px;
   color: var(--ink);
   outline: none;
-  transition: border-color .2s;
-  resize: none;
 }
-select { cursor: pointer; }
-input:focus, textarea:focus, select:focus { border-color: var(--accent-l); }
-.char-counter { text-align: right; font-size: 11px; color: var(--ink-faint); margin-top: 3px; }
-.char-counter.warn { color: var(--red); }
-.form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+.d-search-input::placeholder { color: var(--ink-soft); }
+.d-notif-btn {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  letter-spacing: .5px;
+  position: relative;
+}
+.notif-dot {
+  position: absolute;
+  top: -2px; right: -8px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.d-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 40px 40px;
+  display: flex;
+  justify-content: center;
+}
+.d-feed-inner { width: 100%; max-width: 640px; }
 
-/* ── 暱稱 Modal ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.6);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 100;
-  animation: fadeIn .15s ease;
+/* 文章條列 - 桌面 */
+.post-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--ink-line);
+  cursor: pointer;
 }
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 28px 24px;
-  width: 320px;
-  max-width: 90vw;
+.post-row:hover .post-title-text { color: var(--orange); }
+.post-left { min-width: 0; }
+.post-tag-author {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
 }
-.modal h3 {
-  font-family: 'Noto Serif TC', serif;
-  font-weight: 400;
-  font-size: 16px;
+.post-title-text {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ink);
+  transition: color .15s;
+  margin-bottom: 5px;
+}
+.post-preview {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-right { flex-shrink: 0; text-align: right; }
+.post-time-small { font-size: 11px; color: var(--ink-faint); }
+.post-cmt-count  { font-size: 11px; color: var(--ink-faint); margin-top: 5px; }
+
+/* 桌面文章詳細頁 */
+.d-detail {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 40px 60px;
+  display: flex;
+  justify-content: center;
+}
+.d-detail-inner { width: 100%; max-width: 640px; }
+
+/* ══ 手機版 1b ══ */
+.mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 手機頂欄 */
+.m-topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 22px 14px;
+  position: relative;
+}
+.m-logo {
+  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: var(--ink);
+}
+.m-topbar-btns { display: flex; align-items: center; gap: 16px; }
+.m-topbar-btn {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  letter-spacing: .5px;
+  position: relative;
+}
+.m-search-bar {
+  flex-shrink: 0;
+  padding: 0 22px 12px;
+}
+.m-search-bar input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(38,36,34,.25);
+  background: transparent;
+  padding: 6px 2px;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+.m-search-bar input::placeholder { color: var(--ink-soft); }
+
+/* 手機分類列 */
+.m-cats {
+  flex-shrink: 0;
+  display: flex;
+  gap: 16px;
+  padding: 0 22px 14px;
+  border-bottom: 1px solid var(--ink-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.m-cats::-webkit-scrollbar { display: none; }
+.m-cat {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  padding: 0 0 4px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.m-cat.active { font-weight: 700; color: var(--ink); border-bottom-color: var(--orange); }
+
+/* 手機動態 */
+.m-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 22px 90px;
+  background: var(--bg);
+}
+.m-post-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--ink-line);
+  cursor: pointer;
+}
+.m-post-row:hover .post-title-text { color: var(--orange); }
+
+/* 手機浮動發文按鈕 */
+.m-fab {
+  position: absolute;
+  right: 22px; bottom: 24px;
+  z-index: 3;
+  background: var(--orange);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(192,90,60,.4);
+  transition: opacity .15s;
+}
+.m-fab:hover { opacity: .85; }
+
+/* ══ 共用：文章詳細頁 ══ */
+.detail-wrap { padding-top: 8px; }
+.back-btn {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 14px;
+  display: block;
+}
+.back-btn:hover { color: var(--ink); }
+.detail-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  color: var(--ink-soft);
+  background: rgba(38,36,34,.06);
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+}
+.detail-title {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 14px 0 8px;
+}
+.detail-meta {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.detail-body {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+  margin: 18px 0;
+}
+.detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0;
+  border-top: 1px solid var(--ink-line);
+  border-bottom: 1px solid var(--ink-line);
+  margin-bottom: 22px;
+}
+.like-btn { font-size: 12px; color: var(--ink-mid); }
+.like-btn.liked { font-weight: 700; color: var(--orange); }
+.cmt-total { font-size: 12px; color: var(--ink-faint); }
+.comments-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+.comment-item { margin-bottom: 16px; }
+.comment-author {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.comment-time { font-weight: 400; color: var(--ink-soft); margin-left: 6px; }
+.comment-del {
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-left: 8px;
+  transition: color .15s;
+}
+.comment-del:hover { color: var(--orange); }
+.comment-del-confirm { font-size: 11px; color: var(--orange); }
+.comment-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(38,36,34,.75);
+  margin-top: 5px;
+}
+.reply-indent {
+  margin: 10px 0 0 18px;
+  padding-left: 14px;
+  border-left: 2px solid rgba(38,36,34,.12);
+}
+.reply-author { font-size: 12px; font-weight: 600; color: var(--ink); }
+.reply-text   { font-size: 12.5px; line-height: 1.7; color: rgba(38,36,34,.7); margin-top: 4px; }
+
+/* 回覆輸入列 (固定在底部) */
+.reply-bar {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 3;
+  padding: 12px 22px;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--ink-line);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.reply-bar input {
+  flex: 1;
+  border: none;
+  background: rgba(38,36,34,.05);
+  border-radius: var(--radius-pill);
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+.reply-send {
+  background: var(--orange);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  transition: opacity .15s;
+}
+.reply-send:disabled { background: rgba(38,36,34,.12); color: rgba(38,36,34,.35); cursor: default; }
+.reply-send:not(:disabled):hover { opacity: .85; }
+
+/* 桌面回覆列 */
+.d-reply-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 26px;
+}
+.d-reply-bar input {
+  flex: 1;
+  border: none;
+  background: rgba(38,36,34,.05);
+  border-radius: var(--radius-pill);
+  padding: 11px 18px;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+}
+
+/* ══ 發文 Modal ══ */
+.compose-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(38,36,34,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.compose-modal {
+  width: 520px;
+  max-width: 100%;
+  max-height: 90vh;
+  background: rgba(255,255,255,.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.35);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.compose-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.compose-cancel { font-size: 12.5px; font-weight: 500; color: var(--ink-mid); }
+.compose-cancel:hover { color: var(--ink); }
+.compose-title-label { font-size: 14px; font-weight: 700; color: var(--ink); }
+.compose-submit {
+  background: var(--orange);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: opacity .15s;
+}
+.compose-submit:hover { opacity: .85; }
+.compose-submit:disabled { background: rgba(38,36,34,.12); color: rgba(38,36,34,.35); cursor: default; }
+.compose-cats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
-.modal p { font-size: 12px; color: var(--ink-soft); margin-bottom: 12px; }
-
-/* ── Toast ── */
-.toast {
-  font-size: 12px; padding: 7px 14px;
-  border-radius: var(--radius); margin-top: 10px; display: none;
+.compose-cat {
+  border: 1px solid rgba(38,36,34,.14);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(38,36,34,.65);
+  background: rgba(255,255,255,.5);
+  transition: all .15s;
 }
-.toast.error   { background: #2e1f1f; color: var(--red);   border: 1px solid #5a3030; }
-.toast.success { background: #1a2e22; color: var(--green); border: 1px solid #2e5a3e; }
-.toast.show    { display: block; }
+.compose-cat.active { background: var(--orange); color: #fff; border-color: var(--orange); font-weight: 600; }
+.compose-title-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(38,36,34,.2);
+  background: transparent;
+  padding: 8px 2px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  outline: none;
+  margin-bottom: 14px;
+}
+.compose-title-input::placeholder { color: rgba(38,36,34,.3); }
+.compose-body-input {
+  min-height: 160px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink);
+  outline: none;
+}
+.compose-body-input::placeholder { color: rgba(38,36,34,.3); }
+.compose-note { font-size: 11px; color: rgba(38,36,34,.4); margin-top: 10px; }
 
-/* ── 空狀態 / 載入 ── */
-.empty-state { text-align: center; padding: 40px 0; color: var(--ink-faint); font-size: 13px; }
-.loading     { text-align: center; padding: 24px; color: var(--ink-faint); font-size: 12px; }
+/* ══ 通知 Dropdown ══ */
+.notif-dropdown {
+  position: absolute;
+  top: 60px; right: 40px;
+  width: 240px;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(38,36,34,.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(38,36,34,.18);
+  padding: 10px;
+  z-index: 5;
+}
+.m-notif-dropdown {
+  position: absolute;
+  top: 52px; right: 22px;
+  width: 220px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(38,36,34,.08);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(38,36,34,.18);
+  padding: 10px;
+  z-index: 5;
+}
+.notif-item {
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(38,36,34,.06);
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-text { font-size: 12px; color: var(--ink); line-height: 1.4; }
+.notif-time { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ══ 空狀態 ══ */
+.empty-state {
+  padding: 60px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
 }
 
-/* ── 刪除確認 ── */
-.btn-mention { background: rgba(0,0,0,.3); color: var(--ink-soft); border: 1px solid rgba(255,255,255,.1); font-size: 11px; padding: 3px 8px; }
-.btn-mention:hover { color: var(--ink); border-color: rgba(255,255,255,.2); background: rgba(0,0,0,.45); }
-.mention { color: var(--accent); font-weight: 500; }
-.del-confirm { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--red); }
-.btn-confirm-yes { background: var(--red); color: #fff; padding: 2px 8px; font-size: 11px; }
-.btn-confirm-no  { background: transparent; border: 1px solid var(--line); color: var(--ink-soft); padding: 2px 8px; font-size: 11px; }
+/* ══ 載入中 ══ */
+.loading {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
 </style>
 </head>
 <body>
 
+<!-- ══ 桌面版 2a ══ -->
+<div class="desktop" id="desktopView">
+  <div class="sidebar">
+    <div class="sidebar-logo">VIRGOHI21</div>
+    <div class="sidebar-cats" id="sidebarCats"></div>
+    <button class="sidebar-compose" onclick="openCompose()">發文</button>
+  </div>
+  <div class="d-main">
+    <!-- 頂欄 -->
+    <div class="d-topbar">
+      <input class="d-search-input" id="dSearchInput" placeholder="搜尋討論..." oninput="onSearch()">
+      <button class="d-notif-btn" onclick="toggleNotif('d')">
+        通知
+        <span class="notif-dot" id="dNotifDot" style="display:none"></span>
+      </button>
+      <div class="notif-dropdown" id="dNotifDropdown" style="display:none"></div>
+    </div>
+    <!-- 動態列表 -->
+    <div class="d-feed vg-scroll" id="dFeed" style="display:flex">
+      <div class="d-feed-inner" id="dFeedInner">
+        <div class="loading">載入中…</div>
+      </div>
+    </div>
+    <!-- 文章詳細 -->
+    <div class="d-detail vg-scroll" id="dDetail" style="display:none">
+      <div class="d-detail-inner" id="dDetailInner"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 手機版 1b ══ -->
+<div class="mobile" id="mobileView">
+  <div class="m-topbar">
+    <div class="m-logo">VIRGOHI21</div>
+    <div class="m-topbar-btns">
+      <button class="m-topbar-btn" onclick="toggleMSearch()">搜尋</button>
+      <button class="m-topbar-btn" onclick="toggleNotif('m')" style="position:relative">
+        通知
+        <span class="notif-dot" id="mNotifDot" style="display:none"></span>
+      </button>
+    </div>
+    <div class="m-notif-dropdown" id="mNotifDropdown" style="display:none"></div>
+  </div>
+  <div class="m-search-bar" id="mSearchBar" style="display:none">
+    <input id="mSearchInput" placeholder="搜尋討論..." oninput="onSearch()">
+  </div>
+  <div class="m-cats" id="mCats"></div>
+  <!-- 動態 -->
+  <div class="m-feed vg-scroll" id="mFeed">
+    <div class="loading">載入中…</div>
+  </div>
+  <!-- 文章詳細 -->
+  <div class="m-feed vg-scroll" id="mDetail" style="display:none">
+    <div id="mDetailInner"></div>
+  </div>
+  <!-- 發文按鈕 -->
+  <button class="m-fab" id="mFab" onclick="openCompose()">發文</button>
+  <!-- 回覆列 -->
+  <div class="reply-bar" id="mReplyBar" style="display:none">
+    <input id="mReplyInput" placeholder="以匿名身份留言...">
+    <button class="reply-send" id="mReplySend" onclick="sendReply()" disabled>送出</button>
+  </div>
+</div>
+
+<!-- ══ 發文 Modal ══ -->
+<div class="compose-overlay" id="composeOverlay" style="display:none" onclick="onOverlayClick(event)">
+  <div class="compose-modal">
+    <div class="compose-header">
+      <button class="compose-cancel" onclick="closeCompose()">取消</button>
+      <span class="compose-title-label">新增討論</span>
+      <button class="compose-submit" id="composeSubmit" onclick="submitPost()" disabled>發布</button>
+    </div>
+    <div class="compose-cats" id="composeCats"></div>
+    <input class="compose-title-input" id="composeTitleInput" placeholder="下一個標題..." maxlength="50" oninput="onComposeInput()">
+    <textarea class="compose-body-input" id="composeBodyInput" placeholder="分享點什麼吧，以匿名身份發佈..." oninput="onComposeInput()"></textarea>
+    <div class="compose-note">發布後將以匿名編號顯示，無法回溯身份</div>
+  </div>
+</div>
+
 <script>
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
-</script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
+const CATEGORIES = ['全部', '綜合', '創作', '討論', '公告'];
 
-<!-- 頂欄 -->
-<div class="topbar">
-  <div class="topbar-title">VIRGOHI21</div>
-  <div class="topbar-right">
-    <div class="nickname-display" id="nicknameDisplay"></div>
-    <button class="btn-ghost" onclick="openNicknameModal()">設定暱稱</button>
-  </div>
-</div>
-
-<!-- 主體（列表 / 文章 切換） -->
-<div id="listView">
-  <div class="category-bar" id="categoryBar">
-    <button class="cat-btn active" data-cat="" onclick="selectCategory(this, '')">全部</button>
-  </div>
-  <div class="main">
-    <div class="list-header">
-      <span class="list-count" id="listCount"></span>
-      <button class="btn-primary" onclick="openNewPostForm()">＋ 發文</button>
-    </div>
-    <div id="tagFilterBar" style="display:none; margin-bottom:12px;">
-      <span style="font-size:12px; color:var(--ink-soft);">標籤篩選：</span>
-      <span id="activeTagLabel" style="font-size:12px; color:var(--accent);"></span>
-      <button class="btn-ghost" style="padding:3px 10px; font-size:11px; margin-left:8px;" onclick="clearTagFilter()">✕ 清除</button>
-    </div>
-    <div class="post-list" id="postList">
-      <div class="loading">載入中…</div>
-    </div>
-  </div>
-</div>
-
-<div id="postView" style="display:none;">
-  <div class="main" id="postViewContent"></div>
-</div>
-
-<!-- 暱稱 Modal -->
-<div class="modal-overlay" id="nicknameModal" style="display:none;">
-  <div class="modal">
-    <h3>設定你的暱稱</h3>
-    <p>暱稱會存在你的瀏覽器裡，不需要註冊帳號。</p>
-    <div class="form-row">
-      <input type="text" id="nicknameInput" placeholder="輸入暱稱（最多 20 字）" maxlength="20">
-    </div>
-    <div id="nicknameToast" class="toast"></div>
-    <div class="form-actions">
-      <button class="btn-ghost" onclick="closeNicknameModal()">取消</button>
-      <button class="btn-primary" onclick="saveNickname()">儲存</button>
-    </div>
-  </div>
-</div>
-
-<script>
 // ── 狀態 ──
-let nickname = localStorage.getItem('forum_nickname') || '';
-let currentCategory = '';
-let currentTag = '';
-let currentPostId = null;
-let categories = [];
 let allPosts = [];
-// ── 工具 ──
-function esc(s) {
-  return String(s||'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+let allReplies = [];
+let currentCat = '全部';
+let searchQuery = '';
+let currentPostId = null;
+let replyInput = '';
+let selectedComposeCat = '綜合';
+let notifOpen = { d: false, m: false };
+let mSearchOpen = false;
+
+// 匿名 ID（存在 localStorage）
+let anonId = localStorage.getItem('virgohi_anon');
+if (!anonId) {
+  anonId = '#' + Math.random().toString(36).slice(2,7).toUpperCase();
+  localStorage.setItem('virgohi_anon', anonId);
 }
-function fmt(iso) {
-  const d = new Date(iso), p = n => String(n).padStart(2,'0');
-  return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
-}
-function showToast(id, msg, type) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.className = `toast ${type} show`;
-  setTimeout(() => el.className = 'toast', 2800);
-}
+
 function api(params) {
   return fetch(`${SCRIPT_URL}?${new URLSearchParams(params)}`).then(r => r.json());
 }
 
-// ── 暱稱 ──
-function updateNicknameDisplay() {
-  const el = document.getElementById('nicknameDisplay');
-  el.innerHTML = nickname
-    ? `你好，<span onclick="openNicknameModal()">${esc(nickname)}</span>`
-    : '';
+function fmt(iso) {
+  const d = new Date(iso), p = n => String(n).padStart(2,'0');
+  const now = new Date();
+  const diff = (now - d) / 1000;
+  if (diff < 60) return '剛剛';
+  if (diff < 3600) return `${Math.floor(diff/60)} 分鐘前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)} 小時前`;
+  return `${d.getMonth()+1}/${d.getDate()}`;
 }
-function openNicknameModal() {
-  document.getElementById('nicknameInput').value = nickname;
-  document.getElementById('nicknameModal').style.display = 'flex';
-  setTimeout(() => document.getElementById('nicknameInput').focus(), 50);
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function closeNicknameModal() {
-  document.getElementById('nicknameModal').style.display = 'none';
-}
-function saveNickname() {
-  const val = document.getElementById('nicknameInput').value.trim();
-  if (!val) return showToast('nicknameToast', '請填寫暱稱', 'error');
-  nickname = val;
-  localStorage.setItem('forum_nickname', nickname);
-  updateNicknameDisplay();
-  closeNicknameModal();
-}
-document.getElementById('nicknameModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeNicknameModal();
-});
-document.getElementById('nicknameInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') saveNickname();
-});
 
 // ── 分類 ──
-async function loadCategories() {
-  const data = await api({ action: 'getCategories' });
-  if (!data.success) return;
-  categories = data.categories;
-  const bar = document.getElementById('categoryBar');
-  categories.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'cat-btn';
-    btn.dataset.cat = cat;
-    btn.textContent = cat;
-    btn.onclick = () => selectCategory(btn, cat);
-    bar.appendChild(btn);
-  });
-}
-function selectCategory(btn, cat) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentCategory = cat;
-  loadPosts();
+function buildCats() {
+  const cats = CATEGORIES;
+  // 桌面側欄
+  document.getElementById('sidebarCats').innerHTML = cats.map(c => `
+    <button class="sidebar-cat${c===currentCat?' active':''}" onclick="selectCat('${esc(c)}')">${esc(c)}</button>
+  `).join('');
+  // 手機標籤
+  document.getElementById('mCats').innerHTML = cats.map(c => `
+    <button class="m-cat${c===currentCat?' active':''}" onclick="selectCat('${esc(c)}')">${esc(c)}</button>
+  `).join('');
+  // 發文分類
+  const composeCats = CATEGORIES.filter(c => c !== '全部');
+  document.getElementById('composeCats').innerHTML = composeCats.map(c => `
+    <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
+  `).join('');
 }
 
-// ── 文章列表 ──
+function selectCat(cat) {
+  currentCat = cat;
+  searchQuery = '';
+  document.getElementById('dSearchInput').value = '';
+  if (document.getElementById('mSearchInput')) document.getElementById('mSearchInput').value = '';
+  buildCats();
+  renderFeed();
+}
+
+function selectComposeCat(cat) {
+  selectedComposeCat = cat;
+  const composeCats = CATEGORIES.filter(c => c !== '全部');
+  document.getElementById('composeCats').innerHTML = composeCats.map(c => `
+    <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
+  `).join('');
+}
+
+// ── 搜尋 ──
+function onSearch() {
+  const dv = document.getElementById('dSearchInput').value;
+  const mv = document.getElementById('mSearchInput') ? document.getElementById('mSearchInput').value : '';
+  searchQuery = dv || mv;
+  renderFeed();
+}
+
+function toggleMSearch() {
+  mSearchOpen = !mSearchOpen;
+  document.getElementById('mSearchBar').style.display = mSearchOpen ? 'block' : 'none';
+}
+
+// ── 通知 ──
+function toggleNotif(type) {
+  notifOpen[type] = !notifOpen[type];
+  const el = document.getElementById(type === 'd' ? 'dNotifDropdown' : 'mNotifDropdown');
+  if (notifOpen[type]) {
+    el.innerHTML = `<div class="notif-item"><div class="notif-text">目前沒有新通知</div></div>`;
+  }
+  el.style.display = notifOpen[type] ? 'block' : 'none';
+}
+
+// ── 載入文章 ──
 async function loadPosts() {
-  document.getElementById('postList').innerHTML = '<div class="loading">載入中…</div>';
-  const data = await api({ action: 'getPosts', category: currentCategory });
-  if (!data.success) {
-    document.getElementById('postList').innerHTML = '<div class="empty-state">載入失敗</div>';
-    return;
-  }
+  const data = await api({ action: 'getPosts' });
+  if (!data.success) return;
   allPosts = data.posts;
-  currentTag = '';
-  document.getElementById('tagFilterBar').style.display = 'none';
-  renderPostList();
+  renderFeed();
 }
 
-function renderPostList() {
-  const posts = currentTag
-    ? allPosts.filter(p => (p.tags||'').split(',').map(t=>t.trim()).includes(currentTag))
-    : allPosts;
+function filteredPosts() {
+  let list = allPosts;
+  if (currentCat !== '全部') list = list.filter(p => p.category === currentCat);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(p =>
+      (p.title||'').toLowerCase().includes(q) ||
+      (p.content||'').toLowerCase().includes(q)
+    );
+  }
+  return list;
+}
 
-  document.getElementById('listCount').textContent = posts.length ? `${posts.length} 篇文章` : '';
+// ── 渲染列表 ──
+function renderFeed() {
+  const posts = filteredPosts();
 
+  // 桌面
+  const dInner = document.getElementById('dFeedInner');
   if (!posts.length) {
-    document.getElementById('postList').innerHTML =
-      `<div class="empty-state">${currentTag ? `沒有標籤「${esc(currentTag)}」的文章` : '還沒有文章，來發第一篇吧'}</div>`;
-    return;
-  }
-  document.getElementById('postList').innerHTML = posts.map(p => {
-    const tags = (p.tags||'').split(',').filter(Boolean);
-    return `
-    <div class="post-card" onclick="openPost('${esc(p.id)}')">
-      <div class="post-meta">
-        <span class="post-category">${esc(p.category)}</span>
-        <span class="post-author">${esc(p.author)}</span>
-        <span class="post-time">${fmt(p.timestamp)}</span>
-      </div>
-      <div class="post-title">${esc(p.title)}</div>
-      <div class="post-footer">
-        <div class="post-tags">${tags.map(t => {
-          const trimmed = t.trim();
-          const isActive = trimmed === currentTag;
-          return `<span class="tag${isActive ? ' active' : ''}"
-            onclick="event.stopPropagation(); selectTag('${esc(trimmed)}')">${esc(trimmed)}</span>`;
-        }).join('')}</div>
-        <span class="reply-count">${p.replyCount ? `💬 ${p.replyCount}` : ''}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function selectTag(tag) {
-  currentTag = tag;
-  document.getElementById('tagFilterBar').style.display = 'block';
-  document.getElementById('activeTagLabel').textContent = tag;
-  renderPostList();
-}
-
-function clearTagFilter() {
-  currentTag = '';
-  document.getElementById('tagFilterBar').style.display = 'none';
-  renderPostList();
-}
-
-// ── 發文表單 ──
-function openNewPostForm() {
-  if (!nickname) {
-    openNicknameModal();
-    return;
-  }
-  document.getElementById('listView').style.display = 'none';
-  document.getElementById('postView').style.display = 'block';
-  document.getElementById('postViewContent').innerHTML = `
-    <div class="post-view" style="padding-top:16px;">
-      <button class="btn-back" onclick="backToList()">← 返回列表</button>
-      <div class="form-section" style="margin-top:16px;">
-        <h3>發表新文章</h3>
-        <div class="form-two-col">
-          <div class="form-row">
-            <label class="form-label">分類</label>
-            <select id="newCategory">
-              ${categories.map(c => `<option>${esc(c)}</option>`).join('')}
-            </select>
-          </div>
-          <div class="form-row">
-            <label class="form-label">標籤（逗號分隔）</label>
-            <input type="text" id="newTags" placeholder="例：心得, 問題">
-          </div>
-        </div>
-        <div class="form-row">
-          <label class="form-label">標題</label>
-          <input type="text" id="newTitle" placeholder="文章標題（最多 50 字）" maxlength="50"
-            oninput="updateCounter('newTitleCounter', this.value.length, 50)">
-          <div class="char-counter" id="newTitleCounter">0 / 50</div>
-        </div>
-        <div class="form-row">
-          <label class="form-label">內容</label>
-          <textarea id="newContent" style="min-height:140px;" placeholder="文章內容…" maxlength="2000"
-            oninput="updateCounter('newContentCounter', this.value.length, 2000)"></textarea>
-          <div class="char-counter" id="newContentCounter">0 / 2000</div>
-        </div>
-        <div id="newPostToast" class="toast"></div>
-        <div class="form-actions">
-          <button class="btn-ghost" onclick="backToList()">取消</button>
-          <button class="btn-primary" id="newPostSubmit" onclick="submitPost()">發表</button>
-        </div>
-      </div>
-    </div>`;
-}
-
-function updateCounter(id, len, max) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = `${len} / ${max}`;
-  el.className = `char-counter${len > max * .9 ? ' warn' : ''}`;
-}
-
-async function submitPost() {
-  const title   = document.getElementById('newTitle').value.trim();
-  const content = document.getElementById('newContent').value.trim();
-  const category = document.getElementById('newCategory').value;
-  const tags    = document.getElementById('newTags').value.trim();
-  const btn     = document.getElementById('newPostSubmit');
-
-  if (!title)   return showToast('newPostToast', '請填寫標題', 'error');
-  if (!content) return showToast('newPostToast', '請填寫內容', 'error');
-
-  btn.disabled = true; btn.textContent = '發表中…';
-  const data = await api({ action:'addPost', author: nickname, title, content, category, tags });
-  if (data.success) {
-    backToList();
-    await loadPosts();
+    dInner.innerHTML = '<div class="empty-state">沒有符合的討論</div>';
   } else {
-    showToast('newPostToast', data.error || '發表失敗', 'error');
-    btn.disabled = false; btn.textContent = '發表';
+    dInner.innerHTML = posts.map(p => `
+      <div class="post-row" onclick="openPost('${esc(p.id)}')">
+        <div class="post-left">
+          <div class="post-tag-author">${esc(p.category)} · ${esc(p.author)}</div>
+          <div class="post-title-text">${esc(p.title)}</div>
+          <div class="post-preview">${esc(p.content||'')}</div>
+        </div>
+        <div class="post-right">
+          <div class="post-time-small">${fmt(p.timestamp)}</div>
+          <div class="post-cmt-count">${p.replyCount||0} 留言</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // 手機
+  const mFeed = document.getElementById('mFeed');
+  if (!posts.length) {
+    mFeed.innerHTML = '<div class="empty-state">沒有符合的討論</div>';
+  } else {
+    mFeed.innerHTML = posts.map(p => `
+      <div class="m-post-row" onclick="openPost('${esc(p.id)}')">
+        <div class="post-left">
+          <div class="post-tag-author">${esc(p.category)} · ${esc(p.author)}</div>
+          <div class="post-title-text">${esc(p.title)}</div>
+        </div>
+        <div class="post-right">
+          <div class="post-time-small">${fmt(p.timestamp)}</div>
+          <div class="post-cmt-count">${p.replyCount||0} 留言</div>
+        </div>
+      </div>`).join('');
   }
 }
 
-// ── 單篇文章 ──
+// ── 開啟文章 ──
 async function openPost(id) {
   currentPostId = id;
-  document.getElementById('listView').style.display = 'none';
-  document.getElementById('postView').style.display = 'block';
-  document.getElementById('postViewContent').innerHTML = '<div class="loading" style="padding-top:24px;">載入中…</div>';
-
+  showDetailView(true);
   const data = await api({ action: 'getPost', id });
-  if (!data.success) {
-    document.getElementById('postViewContent').innerHTML = '<div class="empty-state">文章不存在</div>';
-    return;
-  }
+  if (!data.success) { showDetailView(false); return; }
   const { post, replies } = data;
-  const tags = (post.tags||'').split(',').filter(Boolean);
+  allReplies = replies;
+  renderDetail(post, replies);
+}
 
-  document.getElementById('postViewContent').innerHTML = `
-    <div class="post-view">
-      <div class="post-view-header">
-        <button class="btn-back" onclick="backToList()">← 返回列表</button>
-        <div class="post-view-title">${esc(post.title)}</div>
-        <div class="post-view-meta">
-          <span class="post-category">${esc(post.category)}</span>
-          <span>${esc(post.author)}</span>
-          <span style="color:var(--ink-faint)">${fmt(post.timestamp)}</span>
-          ${tags.length ? `<div class="post-tags">${tags.map(t=>`<span class="tag">${esc(t.trim())}</span>`).join('')}</div>` : ''}
-          <span style="margin-left:auto;" id="postDelBtn">
-            <button class="btn-danger" onclick="confirmDeletePost('${esc(post.id)}')">刪除文章</button>
-          </span>
-        </div>
+function renderDetail(post, replies) {
+  const html = `
+    <div class="detail-wrap">
+      <button class="back-btn" onclick="closeDetail()">← 返回</button>
+      <div><span class="detail-tag">${esc(post.category)}</span></div>
+      <div class="detail-title">${esc(post.title)}</div>
+      <div class="detail-meta">${esc(post.author)} · ${fmt(post.timestamp)}
+        <button class="comment-del" onclick="confirmDelPost('${esc(post.id)}')" id="delPostBtn">刪除</button>
       </div>
-      <div class="post-view-body">${esc(post.content)}</div>
-
-      <div class="replies-section">
-        <div class="replies-title">回覆 ${replies.length ? `· ${replies.length} 則` : ''}</div>
-        <div id="repliesList">
-          ${replies.length ? replies.map(r => renderReply(r)).join('') :
-            '<div class="empty-state" style="padding:20px 0;">還沒有回覆</div>'}
-        </div>
+      <div class="detail-body">${esc(post.content||'')}</div>
+      <div class="detail-actions">
+        <span class="cmt-total">${replies.length} 則留言</span>
       </div>
-
-      <div class="form-section" id="replyForm">
-        <h3>留下回覆</h3>
-        <div class="form-row">
-          <label class="form-label">內容</label>
-          <textarea id="replyContent" style="min-height:90px;" placeholder="寫下你的回覆…" maxlength="1000"
-            oninput="updateCounter('replyCounter', this.value.length, 1000)"></textarea>
-          <div class="char-counter" id="replyCounter">0 / 1000</div>
-        </div>
-        <div id="replyToast" class="toast"></div>
-        <div class="form-actions">
-          <button class="btn-primary" id="replySubmit" onclick="submitReply()">送出回覆</button>
-        </div>
+      <div class="comments-label">留言</div>
+      <div id="commentsList">
+        ${replies.length ? replies.map(r => renderReply(r)).join('') : '<div class="empty-state" style="padding:20px 0">還沒有留言</div>'}
+      </div>
+      <div class="d-reply-bar">
+        <input id="dReplyInput" placeholder="以匿名身份留言..." oninput="onDReplyInput(this)">
+        <button class="reply-send" id="dReplySend" onclick="sendReply()" disabled>送出</button>
       </div>
     </div>`;
 
-  if (!nickname) {
-    document.getElementById('replyForm').innerHTML =
-      `<div class="empty-state" style="padding:20px 0;">
-        <button class="btn-primary" onclick="openNicknameModal()">設定暱稱後即可回覆</button>
-      </div>`;
-  }
+  document.getElementById('dDetailInner').innerHTML = html;
+  document.getElementById('mDetailInner').innerHTML = html;
+
+  // 手機回覆列
+  document.getElementById('mReplyBar').style.display = 'flex';
+  document.getElementById('mFab').style.display = 'none';
+  document.getElementById('mReplyInput').oninput = function() {
+    document.getElementById('mReplySend').disabled = !this.value.trim();
+  };
 }
 
 function renderReply(r) {
   return `
-  <div class="reply-item" id="reply_${r.id}">
-    <div class="reply-meta">
-      <span class="reply-author">${esc(r.author)}</span>
-      <span class="reply-time">${fmt(r.timestamp)}</span>
-      <button class="btn-mention" onclick="mentionUser('${esc(r.author)}')">＠</button>
-      <span id="replyDel_${r.id}">
-        <button class="btn-danger" onclick="confirmDeleteReply('${esc(r.id)}')">刪除</button>
-      </span>
+  <div class="comment-item" id="cmt_${r.id}">
+    <div>
+      <span class="comment-author">${esc(r.author)}</span>
+      <span class="comment-time">${fmt(r.timestamp)}</span>
+      <button class="comment-del" onclick="confirmDelReply('${esc(r.id)}')" id="delR_${r.id}">刪除</button>
     </div>
-    <div class="reply-body">${highlightMentions(esc(r.content))}</div>
+    <div class="comment-text">${esc(r.content)}</div>
   </div>`;
 }
 
-function highlightMentions(text) {
-  return text.replace(/@(\S+)/g, '<span class="mention">@$1</span>');
+function onDReplyInput(el) {
+  const btn = document.getElementById('dReplySend');
+  if (btn) btn.disabled = !el.value.trim();
 }
 
-function mentionUser(author) {
-  if (!nickname) return openNicknameModal();
-  const textarea = document.getElementById('replyContent');
-  if (!textarea) return;
-  const mention = `@${author} `;
-  const pos = textarea.selectionStart;
-  const before = textarea.value.slice(0, pos);
-  const after = textarea.value.slice(pos);
-  textarea.value = before + mention + after;
-  textarea.focus();
-  textarea.selectionStart = textarea.selectionEnd = pos + mention.length;
-  updateCounter('replyCounter', textarea.value.length, 1000);
-}
-
-async function submitReply() {
-  if (!nickname) return openNicknameModal();
-  const content = document.getElementById('replyContent').value.trim();
-  const btn = document.getElementById('replySubmit');
-  if (!content) return showToast('replyToast', '請填寫回覆內容', 'error');
-
-  btn.disabled = true; btn.textContent = '送出中…';
-  const data = await api({ action:'addReply', postId: currentPostId, author: nickname, content });
-  if (data.success) {
-    document.getElementById('replyContent').value = '';
-    updateCounter('replyCounter', 0, 1000);
-    await refreshReplies();
-    showToast('replyToast', '回覆成功！', 'success');
-  } else {
-    showToast('replyToast', data.error || '送出失敗', 'error');
+function showDetailView(show) {
+  // 桌面
+  document.getElementById('dFeed').style.display = show ? 'none' : 'flex';
+  document.getElementById('dDetail').style.display = show ? 'flex' : 'none';
+  // 手機
+  document.getElementById('mFeed').style.display = show ? 'none' : 'block';
+  document.getElementById('mDetail').style.display = show ? 'block' : 'none';
+  document.getElementById('mFab').style.display = show ? 'none' : 'block';
+  document.getElementById('mReplyBar').style.display = show ? 'flex' : 'none';
+  if (!show) {
+    document.getElementById('mDetailInner').innerHTML = '<div class="loading">載入中…</div>';
+    document.getElementById('dDetailInner').innerHTML = '<div class="loading">載入中…</div>';
   }
-  btn.disabled = false; btn.textContent = '送出回覆';
 }
 
-async function refreshReplies() {
-  const data = await api({ action: 'getPost', id: currentPostId });
-  if (!data.success) return;
-  const { replies } = data;
-  document.getElementById('repliesList').innerHTML = replies.length
-    ? replies.map(r => renderReply(r)).join('')
-    : '<div class="empty-state" style="padding:20px 0;">還沒有回覆</div>';
+function closeDetail() {
+  currentPostId = null;
+  showDetailView(false);
+  loadPosts();
+}
+
+// ── 回覆 ──
+async function sendReply() {
+  const dInput = document.getElementById('dReplyInput');
+  const mInput = document.getElementById('mReplyInput');
+  const content = (dInput ? dInput.value : '') || (mInput ? mInput.value : '');
+  if (!content.trim() || !currentPostId) return;
+
+  const data = await api({ action: 'addReply', postId: currentPostId, author: anonId, content: content.trim() });
+  if (data.success) {
+    if (dInput) dInput.value = '';
+    if (mInput) mInput.value = '';
+    document.getElementById('mReplySend').disabled = true;
+    const dBtn = document.getElementById('dReplySend');
+    if (dBtn) dBtn.disabled = true;
+    // 重新載入留言
+    const postData = await api({ action: 'getPost', id: currentPostId });
+    if (postData.success) {
+      const list = document.getElementById('commentsList');
+      if (list) list.innerHTML = postData.replies.length
+        ? postData.replies.map(r => renderReply(r)).join('')
+        : '<div class="empty-state" style="padding:20px 0">還沒有留言</div>';
+    }
+  }
 }
 
 // ── 刪除 ──
-function confirmDeletePost(id) {
-  document.getElementById('postDelBtn').innerHTML = `
-    <span class="del-confirm">確定刪除文章？
-      <button class="btn-confirm-yes" onclick="deletePost('${esc(id)}')">刪除</button>
-      <button class="btn-confirm-no" onclick="openPost('${esc(id)}')">取消</button>
-    </span>`;
-}
-async function deletePost(id) {
-  await api({ action:'deletePost', id });
-  backToList();
-  await loadPosts();
+function confirmDelPost(id) {
+  const btn = document.getElementById('delPostBtn');
+  if (btn) btn.outerHTML = `<span class="comment-del-confirm">確定刪除？
+    <button onclick="delPost('${esc(id)}')" style="color:var(--orange);font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;margin-left:4px">刪除</button>
+    <button onclick="loadPosts()" style="color:var(--ink-soft);font-size:11px;border:none;background:none;cursor:pointer;margin-left:4px">取消</button>
+  </span>`;
 }
 
-function confirmDeleteReply(id) {
-  document.getElementById(`replyDel_${id}`).innerHTML = `
-    <span class="del-confirm">確定？
-      <button class="btn-confirm-yes" onclick="deleteReply('${esc(id)}')">刪除</button>
-      <button class="btn-confirm-no" onclick="refreshReplies()">取消</button>
-    </span>`;
-}
-async function deleteReply(id) {
-  await api({ action:'deleteReply', id });
-  await refreshReplies();
+async function delPost(id) {
+  await api({ action: 'deletePost', id });
+  closeDetail();
 }
 
-// ── 導航 ──
-function backToList() {
-  currentPostId = null;
-  document.getElementById('postView').style.display = 'none';
-  document.getElementById('listView').style.display = 'block';
+function confirmDelReply(id) {
+  const btn = document.getElementById(`delR_${id}`);
+  if (btn) btn.outerHTML = `<span class="comment-del-confirm" id="delConfirm_${id}">確定？
+    <button onclick="delReply('${esc(id)}')" style="color:var(--orange);font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;margin-left:4px">刪除</button>
+    <button onclick="cancelDelReply('${esc(id)}')" style="color:var(--ink-soft);font-size:11px;border:none;background:none;cursor:pointer;margin-left:4px">取消</button>
+  </span>`;
+}
+
+async function cancelDelReply(id) {
+  const span = document.getElementById(`delConfirm_${id}`);
+  if (span) span.outerHTML = `<button class="comment-del" onclick="confirmDelReply('${esc(id)}')" id="delR_${id}">刪除</button>`;
+}
+
+async function delReply(id) {
+  await api({ action: 'deleteReply', id });
+  const el = document.getElementById(`cmt_${id}`);
+  if (el) el.remove();
+}
+
+// ── 發文 ──
+function openCompose() {
+  selectedComposeCat = '綜合';
+  document.getElementById('composeTitleInput').value = '';
+  document.getElementById('composeBodyInput').value = '';
+  document.getElementById('composeSubmit').disabled = true;
+  buildCats();
+  document.getElementById('composeOverlay').style.display = 'flex';
+}
+
+function closeCompose() {
+  document.getElementById('composeOverlay').style.display = 'none';
+}
+
+function onOverlayClick(e) {
+  if (e.target === document.getElementById('composeOverlay')) closeCompose();
+}
+
+function onComposeInput() {
+  const title = document.getElementById('composeTitleInput').value.trim();
+  const body  = document.getElementById('composeBodyInput').value.trim();
+  document.getElementById('composeSubmit').disabled = !(title && body);
+}
+
+async function submitPost() {
+  const title   = document.getElementById('composeTitleInput').value.trim();
+  const content = document.getElementById('composeBodyInput').value.trim();
+  const btn = document.getElementById('composeSubmit');
+  if (!title || !content) return;
+  btn.disabled = true;
+  btn.textContent = '發布中…';
+  const data = await api({
+    action: 'addPost',
+    author: anonId,
+    title, content,
+    category: selectedComposeCat,
+    tags: ''
+  });
+  btn.textContent = '發布';
+  if (data.success) {
+    closeCompose();
+    await loadPosts();
+  } else {
+    btn.disabled = false;
+  }
 }
 
 // ── 啟動 ──
-updateNicknameDisplay();
-loadCategories().then(() => loadPosts());
+buildCats();
+loadPosts();
 </script>
 </body>
 </html>
