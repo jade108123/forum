@@ -11,18 +11,19 @@
   src: url('GlowSansTC-Normal-Thin.otf') format('opentype');
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
   --orange: #c05a3c;
   --ink: #262422;
-  --ink-mid: rgba(38,36,34,.55);
-  --ink-soft: rgba(38,36,34,.45);
-  --ink-faint: rgba(38,36,34,.35);
-  --ink-line: rgba(38,36,34,.1);
+  --ink-60: rgba(38,36,34,.6);
+  --ink-50: rgba(38,36,34,.5);
+  --ink-45: rgba(38,36,34,.45);
+  --ink-40: rgba(38,36,34,.4);
+  --ink-14: rgba(38,36,34,.14);
+  --ink-10: rgba(38,36,34,.1);
+  --ink-06: rgba(38,36,34,.06);
   --bg: rgba(240,238,233,.35);
-  --radius-pill: 999px;
+  --pill: 999px;
 }
-
 body {
   font-family: 'Noto Sans TC', sans-serif;
   background: #ede9e2 url('Darkbackground.jpg') center 15% / cover fixed;
@@ -30,70 +31,53 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
-
 button { font-family: 'Noto Sans TC', sans-serif; cursor: pointer; border: none; background: none; padding: 0; }
 input, textarea { font-family: 'Noto Sans TC', sans-serif; }
-.vg-scroll::-webkit-scrollbar { display: none; }
-.vg-scroll { scrollbar-width: none; }
+.scroll::-webkit-scrollbar { display: none; }
+.scroll { scrollbar-width: none; }
 
-/* ══ 桌面版 2a ══ */
-.desktop {
-  display: none;
-  height: 100vh;
-  overflow: hidden;
-}
+/* ══ 桌面版 ══ */
+.desktop { display: none; height: 100vh; overflow: hidden; }
 @media (min-width: 768px) {
   .desktop { display: grid; grid-template-columns: 240px 1fr; }
-  .mobile  { display: none; }
+  .mobile  { display: none !important; }
 }
 
-/* 側邊欄 */
+/* 側欄 */
 .sidebar {
-  border-right: 1px solid var(--ink-line);
+  border-right: 1px solid var(--ink-10);
   padding: 28px 24px;
   display: flex;
   flex-direction: column;
   background: rgba(240,238,233,.3);
   height: 100vh;
 }
-.sidebar-logo {
-  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
+.s-logo {
+  font-family: 'GlowSans','Noto Sans TC',sans-serif;
   font-weight: 900;
   font-size: 15px;
   letter-spacing: 3px;
   color: var(--ink);
   margin-bottom: 32px;
 }
-.sidebar-cats { display: flex; flex-direction: column; gap: 2px; flex: 1; }
-.sidebar-cat {
-  text-align: left;
-  padding: 9px 0;
-  font-size: 13px;
-  color: var(--ink-mid);
-  transition: color .15s;
-}
-.sidebar-cat.active { font-weight: 700; color: var(--orange); }
-.sidebar-cat:hover:not(.active) { color: var(--ink); }
-.sidebar-compose {
+.s-cats { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+.s-cat  { text-align: left; padding: 9px 0; font-size: 13px; color: var(--ink-60); transition: color .15s; }
+.s-cat.active { font-weight: 700; color: var(--orange); }
+.s-cat:hover:not(.active) { color: var(--ink); }
+.s-post-btn {
   background: var(--orange);
   color: #fff;
   padding: 11px 0;
-  border-radius: var(--radius-pill);
+  border-radius: var(--pill);
   font-size: 12.5px;
   font-weight: 700;
   width: 100%;
   transition: opacity .15s;
 }
-.sidebar-compose:hover { opacity: .85; }
+.s-post-btn:hover { opacity: .85; }
 
 /* 桌面主欄 */
-.d-main {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
+.d-main { display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
 .d-topbar {
   flex-shrink: 0;
   display: flex;
@@ -102,7 +86,7 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   padding: 28px 40px 18px;
   gap: 24px;
 }
-.d-search-input {
+.d-search {
   flex: 1;
   max-width: 360px;
   border: none;
@@ -113,89 +97,14 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   color: var(--ink);
   outline: none;
 }
-.d-search-input::placeholder { color: var(--ink-soft); }
-.d-notif-btn {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--ink-mid);
-  letter-spacing: .5px;
-  position: relative;
-}
-.notif-dot {
-  position: absolute;
-  top: -2px; right: -8px;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--orange);
-}
-.d-feed {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 40px 40px;
-  display: flex;
-  justify-content: center;
-}
-.d-feed-inner { width: 100%; max-width: 640px; }
+.d-search::placeholder { color: var(--ink-45); }
+.d-feed   { flex: 1; overflow-y: auto; padding: 0 40px 40px; display: flex; justify-content: center; }
+.d-feed-i { width: 100%; max-width: 640px; }
+.d-detail { flex: 1; overflow-y: auto; padding: 8px 40px 60px; display: flex; justify-content: center; }
+.d-detail-i { width: 100%; max-width: 640px; }
 
-/* 文章條列 - 桌面 */
-.post-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 17px 0;
-  border-bottom: 1px solid var(--ink-line);
-  cursor: pointer;
-}
-.post-row:hover .post-title-text { color: var(--orange); }
-.post-left { min-width: 0; }
-.post-tag-author {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  color: var(--ink-soft);
-  margin-bottom: 5px;
-}
-.post-title-text {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--ink);
-  transition: color .15s;
-  margin-bottom: 5px;
-}
-.post-preview {
-  font-size: 12.5px;
-  line-height: 1.6;
-  color: var(--ink-soft);
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.post-right { flex-shrink: 0; text-align: right; }
-.post-time-small { font-size: 11px; color: var(--ink-faint); }
-.post-cmt-count  { font-size: 11px; color: var(--ink-faint); margin-top: 5px; }
-
-/* 桌面文章詳細頁 */
-.d-detail {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 40px 60px;
-  display: flex;
-  justify-content: center;
-}
-.d-detail-inner { width: 100%; max-width: 640px; }
-
-/* ══ 手機版 1b ══ */
-.mobile {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
-
-/* 手機頂欄 */
+/* ══ 手機版 ══ */
+.mobile { display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
 .m-topbar {
   flex-shrink: 0;
   display: flex;
@@ -205,25 +114,14 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   position: relative;
 }
 .m-logo {
-  font-family: 'GlowSans', 'Noto Sans TC', sans-serif;
+  font-family: 'GlowSans','Noto Sans TC',sans-serif;
   font-weight: 900;
   font-size: 14px;
   letter-spacing: 3px;
   color: var(--ink);
 }
-.m-topbar-btns { display: flex; align-items: center; gap: 16px; }
-.m-topbar-btn {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink-mid);
-  letter-spacing: .5px;
-  position: relative;
-}
-.m-search-bar {
-  flex-shrink: 0;
-  padding: 0 22px 12px;
-}
-.m-search-bar input {
+.m-search-wrap { flex-shrink: 0; padding: 0 22px 12px; }
+.m-search-wrap input {
   width: 100%;
   border: none;
   border-bottom: 1px solid rgba(38,36,34,.25);
@@ -233,47 +131,28 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   color: var(--ink);
   outline: none;
 }
-.m-search-bar input::placeholder { color: var(--ink-soft); }
-
-/* 手機分類列 */
+.m-search-wrap input::placeholder { color: var(--ink-45); }
 .m-cats {
   flex-shrink: 0;
   display: flex;
   gap: 16px;
   padding: 0 22px 14px;
-  border-bottom: 1px solid var(--ink-line);
+  border-bottom: 1px solid var(--ink-10);
   overflow-x: auto;
   scrollbar-width: none;
 }
 .m-cats::-webkit-scrollbar { display: none; }
 .m-cat {
   font-size: 11.5px;
-  color: var(--ink-soft);
+  color: var(--ink-50);
   padding: 0 0 4px;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   transition: all .15s;
 }
 .m-cat.active { font-weight: 700; color: var(--ink); border-bottom-color: var(--orange); }
-
-/* 手機動態 */
-.m-feed {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 22px 90px;
-  background: var(--bg);
-}
-.m-post-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--ink-line);
-  cursor: pointer;
-}
-.m-post-row:hover .post-title-text { color: var(--orange); }
-
-/* 手機浮動發文按鈕 */
+.m-feed { flex: 1; overflow-y: auto; padding: 0 22px 90px; background: var(--bg); }
+.m-detail { flex: 1; overflow-y: auto; padding: 8px 22px 90px; background: var(--bg); }
 .m-fab {
   position: absolute;
   right: 22px; bottom: 24px;
@@ -281,100 +160,13 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   background: var(--orange);
   color: #fff;
   padding: 12px 20px;
-  border-radius: var(--radius-pill);
+  border-radius: var(--pill);
   font-size: 12.5px;
   font-weight: 700;
   box-shadow: 0 8px 20px rgba(192,90,60,.4);
-  transition: opacity .15s;
 }
 .m-fab:hover { opacity: .85; }
-
-/* ══ 共用：文章詳細頁 ══ */
-.detail-wrap { padding-top: 8px; }
-.back-btn {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--ink-mid);
-  margin-bottom: 14px;
-  display: block;
-}
-.back-btn:hover { color: var(--ink); }
-.detail-tag {
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  color: var(--ink-soft);
-  background: rgba(38,36,34,.06);
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-}
-.detail-title {
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1.5;
-  color: var(--ink);
-  margin: 14px 0 8px;
-}
-.detail-meta {
-  font-size: 12px;
-  color: var(--ink-soft);
-}
-.detail-body {
-  font-size: 14px;
-  line-height: 1.85;
-  color: var(--ink);
-  margin: 18px 0;
-}
-.detail-actions {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 14px 0;
-  border-top: 1px solid var(--ink-line);
-  border-bottom: 1px solid var(--ink-line);
-  margin-bottom: 22px;
-}
-.like-btn { font-size: 12px; color: var(--ink-mid); }
-.like-btn.liked { font-weight: 700; color: var(--orange); }
-.cmt-total { font-size: 12px; color: var(--ink-faint); }
-.comments-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--ink-soft);
-  margin-bottom: 12px;
-}
-.comment-item { margin-bottom: 16px; }
-.comment-author {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--ink);
-}
-.comment-time { font-weight: 400; color: var(--ink-soft); margin-left: 6px; }
-.comment-del {
-  font-size: 11px;
-  color: var(--ink-faint);
-  margin-left: 8px;
-  transition: color .15s;
-}
-.comment-del:hover { color: var(--orange); }
-.comment-del-confirm { font-size: 11px; color: var(--orange); }
-.comment-text {
-  font-size: 13px;
-  line-height: 1.7;
-  color: rgba(38,36,34,.75);
-  margin-top: 5px;
-}
-.reply-indent {
-  margin: 10px 0 0 18px;
-  padding-left: 14px;
-  border-left: 2px solid rgba(38,36,34,.12);
-}
-.reply-author { font-size: 12px; font-weight: 600; color: var(--ink); }
-.reply-text   { font-size: 12.5px; line-height: 1.7; color: rgba(38,36,34,.7); margin-top: 4px; }
-
-/* 回覆輸入列 (固定在底部) */
-.reply-bar {
+.m-reply-bar {
   position: absolute;
   left: 0; right: 0; bottom: 0;
   z-index: 3;
@@ -382,706 +174,478 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
   background: rgba(255,255,255,.88);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--ink-line);
+  border-top: 1px solid var(--ink-10);
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.reply-bar input {
+.m-reply-bar input {
   flex: 1;
   border: none;
-  background: rgba(38,36,34,.05);
-  border-radius: var(--radius-pill);
+  background: var(--ink-06);
+  border-radius: var(--pill);
   padding: 10px 16px;
   font-size: 13px;
   color: var(--ink);
   outline: none;
 }
-.reply-send {
-  background: var(--orange);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: var(--radius-pill);
-  font-size: 12px;
-  font-weight: 600;
-  transition: opacity .15s;
+
+/* ══ 文章列表 ══ */
+.post-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--ink-10);
+  cursor: pointer;
 }
-.reply-send:disabled { background: rgba(38,36,34,.12); color: rgba(38,36,34,.35); cursor: default; }
-.reply-send:not(:disabled):hover { opacity: .85; }
+.post-row:hover .p-title { color: var(--orange); }
+.m-post-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--ink-10);
+  cursor: pointer;
+}
+.m-post-row:hover .p-title { color: var(--orange); }
+.p-left { min-width: 0; }
+.p-meta { font-size: 10.5px; font-weight: 600; letter-spacing: .5px; color: var(--ink-45); margin-bottom: 5px; }
+.p-title { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--ink); transition: color .15s; margin-bottom: 4px; }
+.p-preview { font-size: 12.5px; line-height: 1.6; color: var(--ink-50); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.p-right { flex-shrink: 0; text-align: right; }
+.p-time { font-size: 11px; color: var(--ink-40); }
+.p-cmt  { font-size: 11px; color: var(--ink-40); margin-top: 5px; }
+
+/* ══ 文章詳細頁 ══ */
+.detail-wrap { padding-top: 8px; }
+.back-btn { font-size: 12.5px; font-weight: 500; color: var(--ink-60); margin-bottom: 14px; display: inline-block; }
+.back-btn:hover { color: var(--ink); }
+.d-tag { font-size: 10.5px; font-weight: 600; letter-spacing: .5px; color: var(--ink-50); background: var(--ink-06); padding: 3px 9px; border-radius: var(--pill); }
+.d-title { font-size: 22px; font-weight: 800; line-height: 1.5; color: var(--ink); margin: 14px 0 8px; }
+.d-meta  { font-size: 12px; color: var(--ink-45); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.d-body  { font-size: 14px; line-height: 1.85; color: var(--ink); margin: 18px 0; }
+.d-actions { display: flex; align-items: center; gap: 18px; padding: 14px 0; border-top: 1px solid var(--ink-10); border-bottom: 1px solid var(--ink-10); margin-bottom: 22px; }
+.cmt-total { font-size: 12px; color: var(--ink-40); }
+.cmts-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--ink-50); margin-bottom: 12px; }
+.cmt-item { margin-bottom: 16px; }
+.cmt-head { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.cmt-author { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.cmt-time   { font-size: 11px; font-weight: 400; color: var(--ink-40); margin-left: 6px; }
+.cmt-at-btn { font-size: 11px; color: var(--ink-45); margin-left: 8px; }
+.cmt-at-btn:hover { color: var(--orange); }
+.cmt-del-btn { font-size: 11px; color: var(--ink-40); margin-left: 6px; }
+.cmt-del-btn:hover { color: var(--orange); }
+.cmt-text { font-size: 13px; line-height: 1.7; color: rgba(38,36,34,.75); margin-top: 5px; }
+.mention  { color: var(--orange); font-weight: 600; }
+.del-confirm { font-size: 11px; color: var(--orange); }
+.del-yes { color: var(--orange); font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 4px; border: none; background: none; }
+.del-no  { color: var(--ink-50); font-size: 11px; cursor: pointer; margin-left: 4px; border: none; background: none; }
 
 /* 桌面回覆列 */
-.d-reply-bar {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 26px;
-}
-.d-reply-bar input {
+.d-reply-row { display: flex; gap: 10px; align-items: center; margin-top: 26px; }
+.d-reply-row input {
   flex: 1;
   border: none;
-  background: rgba(38,36,34,.05);
-  border-radius: var(--radius-pill);
+  background: var(--ink-06);
+  border-radius: var(--pill);
   padding: 11px 18px;
   font-size: 13px;
   color: var(--ink);
   outline: none;
 }
 
+/* 送出按鈕 */
+.send-btn {
+  background: var(--orange);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: var(--pill);
+  font-size: 12px;
+  font-weight: 600;
+  transition: opacity .15s;
+  flex-shrink: 0;
+}
+.send-btn:hover:not(:disabled) { opacity: .85; }
+.send-btn:disabled { background: var(--ink-14); color: rgba(38,36,34,.35); cursor: default; }
+
 /* ══ 發文 Modal ══ */
-.compose-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
+.overlay {
+  position: fixed; inset: 0; z-index: 10;
   background: rgba(38,36,34,.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   padding: 20px;
 }
 .compose-modal {
-  width: 520px;
-  max-width: 100%;
-  max-height: 90vh;
+  width: 520px; max-width: 100%; max-height: 90vh;
   background: rgba(255,255,255,.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 20px;
   box-shadow: 0 30px 80px rgba(0,0,0,.35);
   padding: 28px;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
   overflow-y: auto;
 }
-.compose-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-.compose-cancel { font-size: 12.5px; font-weight: 500; color: var(--ink-mid); }
+.compose-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.compose-cancel { font-size: 12.5px; font-weight: 500; color: var(--ink-60); }
 .compose-cancel:hover { color: var(--ink); }
-.compose-title-label { font-size: 14px; font-weight: 700; color: var(--ink); }
-.compose-submit {
-  background: var(--orange);
-  color: #fff;
-  padding: 8px 18px;
-  border-radius: var(--radius-pill);
-  font-size: 12.5px;
-  font-weight: 700;
-  transition: opacity .15s;
+.compose-lbl { font-size: 14px; font-weight: 700; color: var(--ink); }
+.compose-ok {
+  background: var(--orange); color: #fff;
+  padding: 8px 18px; border-radius: var(--pill);
+  font-size: 12.5px; font-weight: 700;
 }
-.compose-submit:hover { opacity: .85; }
-.compose-submit:disabled { background: rgba(38,36,34,.12); color: rgba(38,36,34,.35); cursor: default; }
-.compose-cats {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 16px;
-}
-.compose-cat {
-  border: 1px solid rgba(38,36,34,.14);
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  font-size: 11.5px;
-  font-weight: 500;
-  color: rgba(38,36,34,.65);
-  background: rgba(255,255,255,.5);
-  transition: all .15s;
-}
-.compose-cat.active { background: var(--orange); color: #fff; border-color: var(--orange); font-weight: 600; }
-.compose-title-input {
-  width: 100%;
-  border: none;
+.compose-ok:hover:not(:disabled) { opacity: .85; }
+.compose-ok:disabled { background: var(--ink-14); color: rgba(38,36,34,.35); cursor: default; }
+.compose-cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.c-cat { border: 1px solid var(--ink-14); padding: 6px 14px; border-radius: var(--pill); font-size: 11.5px; font-weight: 500; color: rgba(38,36,34,.65); background: rgba(255,255,255,.5); transition: all .15s; }
+.c-cat.active { background: var(--orange); color: #fff; border-color: var(--orange); font-weight: 600; }
+.compose-title-i {
+  width: 100%; border: none;
   border-bottom: 1px solid rgba(38,36,34,.2);
-  background: transparent;
-  padding: 8px 2px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--ink);
-  outline: none;
-  margin-bottom: 14px;
+  background: transparent; padding: 8px 2px;
+  font-size: 16px; font-weight: 700; color: var(--ink); outline: none; margin-bottom: 14px;
 }
-.compose-title-input::placeholder { color: rgba(38,36,34,.3); }
-.compose-body-input {
-  min-height: 160px;
-  width: 100%;
-  border: none;
-  background: transparent;
-  resize: none;
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--ink);
-  outline: none;
+.compose-title-i::placeholder { color: rgba(38,36,34,.3); }
+.compose-body-i {
+  min-height: 160px; width: 100%; border: none;
+  background: transparent; resize: none;
+  font-size: 14px; line-height: 1.7; color: var(--ink); outline: none;
 }
-.compose-body-input::placeholder { color: rgba(38,36,34,.3); }
-.compose-note { font-size: 11px; color: rgba(38,36,34,.4); margin-top: 10px; }
+.compose-body-i::placeholder { color: rgba(38,36,34,.3); }
+.compose-note { font-size: 11px; color: var(--ink-40); margin-top: 10px; }
 
-/* ══ 通知 Dropdown ══ */
-.notif-dropdown {
-  position: absolute;
-  top: 60px; right: 40px;
-  width: 240px;
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(38,36,34,.08);
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(38,36,34,.18);
-  padding: 10px;
-  z-index: 5;
-}
-.m-notif-dropdown {
-  position: absolute;
-  top: 52px; right: 22px;
-  width: 220px;
-  background: rgba(255,255,255,.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(38,36,34,.08);
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(38,36,34,.18);
-  padding: 10px;
-  z-index: 5;
-}
-.notif-item {
-  padding: 8px 6px;
-  border-bottom: 1px solid rgba(38,36,34,.06);
-}
-.notif-item:last-child { border-bottom: none; }
-.notif-text { font-size: 12px; color: var(--ink); line-height: 1.4; }
-.notif-time { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
-
-/* ══ 空狀態 ══ */
-.empty-state {
-  padding: 60px 0;
-  text-align: center;
-  font-size: 13px;
-  color: var(--ink-soft);
-}
-
-/* ══ 載入中 ══ */
-.loading {
-  padding: 40px 0;
-  text-align: center;
-  font-size: 13px;
-  color: var(--ink-soft);
-}
+/* 狀態 */
+.empty   { padding: 60px 0; text-align: center; font-size: 13px; color: var(--ink-45); }
+.loading { padding: 40px 0; text-align: center; font-size: 13px; color: var(--ink-45); }
 </style>
 </head>
 <body>
 
-<!-- ══ 桌面版 2a ══ -->
+<!-- 桌面版 -->
 <div class="desktop" id="desktopView">
   <div class="sidebar">
-    <div class="sidebar-logo">VIRGOHI21</div>
-    <div class="sidebar-cats" id="sidebarCats"></div>
-    <button class="sidebar-compose" onclick="openCompose()">發文</button>
+    <div class="s-logo">VIRGOHI21</div>
+    <div class="s-cats" id="sCats"></div>
+    <button class="s-post-btn" onclick="openCompose()">發文</button>
   </div>
   <div class="d-main">
-    <!-- 頂欄 -->
     <div class="d-topbar">
-      <input class="d-search-input" id="dSearchInput" placeholder="搜尋討論..." oninput="onSearch()">
-      <button class="d-notif-btn" onclick="toggleNotif('d')">
-        通知
-        <span class="notif-dot" id="dNotifDot" style="display:none"></span>
-      </button>
-      <div class="notif-dropdown" id="dNotifDropdown" style="display:none"></div>
+      <input class="d-search scroll" id="dSearch" placeholder="搜尋討論..." oninput="onSearch()">
     </div>
-    <!-- 動態列表 -->
-    <div class="d-feed vg-scroll" id="dFeed" style="display:flex">
-      <div class="d-feed-inner" id="dFeedInner">
-        <div class="loading">載入中…</div>
-      </div>
+    <div class="d-feed scroll" id="dFeed">
+      <div class="d-feed-i" id="dFeedI"><div class="loading">載入中…</div></div>
     </div>
-    <!-- 文章詳細 -->
-    <div class="d-detail vg-scroll" id="dDetail" style="display:none">
-      <div class="d-detail-inner" id="dDetailInner"></div>
+    <div class="d-detail scroll" id="dDetail" style="display:none">
+      <div class="d-detail-i" id="dDetailI"></div>
     </div>
   </div>
 </div>
 
-<!-- ══ 手機版 1b ══ -->
+<!-- 手機版 -->
 <div class="mobile" id="mobileView">
   <div class="m-topbar">
     <div class="m-logo">VIRGOHI21</div>
-    <div class="m-topbar-btns">
-      <button class="m-topbar-btn" onclick="toggleMSearch()">搜尋</button>
-      <button class="m-topbar-btn" onclick="toggleNotif('m')" style="position:relative">
-        通知
-        <span class="notif-dot" id="mNotifDot" style="display:none"></span>
-      </button>
-    </div>
-    <div class="m-notif-dropdown" id="mNotifDropdown" style="display:none"></div>
+    <button style="font-size:12px;font-weight:500;color:var(--ink-60);letter-spacing:.5px" onclick="toggleSearch()">搜尋</button>
   </div>
-  <div class="m-search-bar" id="mSearchBar" style="display:none">
-    <input id="mSearchInput" placeholder="搜尋討論..." oninput="onSearch()">
+  <div class="m-search-wrap" id="mSearchWrap" style="display:none">
+    <input id="mSearch" placeholder="搜尋討論..." oninput="onSearch()">
   </div>
   <div class="m-cats" id="mCats"></div>
-  <!-- 動態 -->
-  <div class="m-feed vg-scroll" id="mFeed">
-    <div class="loading">載入中…</div>
-  </div>
-  <!-- 文章詳細 -->
-  <div class="m-feed vg-scroll" id="mDetail" style="display:none">
-    <div id="mDetailInner"></div>
-  </div>
-  <!-- 發文按鈕 -->
+  <div class="m-feed scroll" id="mFeed"><div class="loading">載入中…</div></div>
+  <div class="m-detail scroll" id="mDetail" style="display:none"><div id="mDetailI"></div></div>
   <button class="m-fab" id="mFab" onclick="openCompose()">發文</button>
-  <!-- 回覆列 -->
-  <div class="reply-bar" id="mReplyBar" style="display:none">
-    <input id="mReplyInput" placeholder="以匿名身份留言...">
-    <button class="reply-send" id="mReplySend" onclick="sendReply()" disabled>送出</button>
+  <div class="m-reply-bar" id="mReplyBar" style="display:none">
+    <input id="mReplyI" placeholder="以匿名身份留言..."
+      oninput="document.getElementById('mSend').disabled=!this.value.trim()">
+    <button class="send-btn" id="mSend" onclick="sendReply('m')" disabled>送出</button>
   </div>
 </div>
 
-<!-- ══ 發文 Modal ══ -->
-<div class="compose-overlay" id="composeOverlay" style="display:none" onclick="onOverlayClick(event)">
+<!-- 發文 Modal -->
+<div class="overlay" id="composeOverlay" style="display:none" onclick="if(event.target===this)closeCompose()">
   <div class="compose-modal">
-    <div class="compose-header">
+    <div class="compose-hd">
       <button class="compose-cancel" onclick="closeCompose()">取消</button>
-      <span class="compose-title-label">新增討論</span>
-      <button class="compose-submit" id="composeSubmit" onclick="submitPost()" disabled>發布</button>
+      <span class="compose-lbl">新增討論</span>
+      <button class="compose-ok" id="cOk" onclick="submitPost()" disabled>發布</button>
     </div>
-    <div class="compose-cats" id="composeCats"></div>
-    <input class="compose-title-input" id="composeTitleInput" placeholder="下一個標題..." maxlength="50" oninput="onComposeInput()">
-    <textarea class="compose-body-input" id="composeBodyInput" placeholder="分享點什麼吧，以匿名身份發佈..." oninput="onComposeInput()"></textarea>
+    <div class="compose-cats" id="cCats"></div>
+    <input class="compose-title-i" id="cTitle" placeholder="下一個標題..." maxlength="50" oninput="checkCompose()">
+    <textarea class="compose-body-i" id="cBody" placeholder="分享點什麼吧，以匿名身份發佈..." oninput="checkCompose()"></textarea>
     <div class="compose-note">發布後將以匿名編號顯示，無法回溯身份</div>
   </div>
 </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
-const CATEGORIES = ['全部', '綜合', '創作', '討論', '公告'];
+const ALL_CATS     = ['全部','綜合','創作','討論','公告'];
+const COMPOSE_CATS = ['綜合','創作','討論'];
 
-// ── 狀態 ──
 let allPosts = [];
-let allReplies = [];
-let currentCat = '全部';
-let searchQuery = '';
-let currentPostId = null;
-let replyInput = '';
-let selectedComposeCat = '綜合';
-let notifOpen = { d: false, m: false };
-let mSearchOpen = false;
+let curCat = '全部';
+let query = '';
+let curPostId = null;
+let cCat = '綜合';
+let searchOpen = false;
 
-// 匿名 ID（存在 localStorage）
 let anonId = localStorage.getItem('virgohi_anon');
 if (!anonId) {
   anonId = '#' + Math.random().toString(36).slice(2,7).toUpperCase();
   localStorage.setItem('virgohi_anon', anonId);
 }
 
-function api(params) {
-  return fetch(`${SCRIPT_URL}?${new URLSearchParams(params)}`).then(r => r.json());
-}
-
-function fmt(iso) {
-  const d = new Date(iso), p = n => String(n).padStart(2,'0');
-  const now = new Date();
-  const diff = (now - d) / 1000;
-  if (diff < 60) return '剛剛';
-  if (diff < 3600) return `${Math.floor(diff/60)} 分鐘前`;
-  if (diff < 86400) return `${Math.floor(diff/3600)} 小時前`;
-  return `${d.getMonth()+1}/${d.getDate()}`;
+function api(p) {
+  return fetch(SCRIPT_URL + '?' + new URLSearchParams(p)).then(function(r){ return r.json(); });
 }
 
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── 分類 ──
+function hl(text) {
+  return text.replace(/@(#[A-Z0-9a-z]+)/g, '<span class="mention">@$1</span>');
+}
+
+function fmt(iso) {
+  var d = new Date(iso), now = new Date(), s = (now - d) / 1000;
+  if (s < 60) return '剛剛';
+  if (s < 3600) return Math.floor(s/60) + ' 分鐘前';
+  if (s < 86400) return Math.floor(s/3600) + ' 小時前';
+  return (d.getMonth()+1) + '/' + d.getDate();
+}
+
 function buildCats() {
-  const cats = CATEGORIES;
-  // 桌面側欄
-  document.getElementById('sidebarCats').innerHTML = cats.map(c => `
-    <button class="sidebar-cat${c===currentCat?' active':''}" onclick="selectCat('${esc(c)}')">${esc(c)}</button>
-  `).join('');
-  // 手機標籤
-  document.getElementById('mCats').innerHTML = cats.map(c => `
-    <button class="m-cat${c===currentCat?' active':''}" onclick="selectCat('${esc(c)}')">${esc(c)}</button>
-  `).join('');
-  // 發文分類
-  const composeCats = CATEGORIES.filter(c => c !== '全部' && c !== '公告');
-  document.getElementById('composeCats').innerHTML = composeCats.map(c => `
-    <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
-  `).join('');
+  document.getElementById('sCats').innerHTML = ALL_CATS.map(function(c){
+    return '<button class="s-cat' + (c===curCat?' active':'') + '" onclick="selectCat(\'' + c + '\')">' + c + '</button>';
+  }).join('');
+  document.getElementById('mCats').innerHTML = ALL_CATS.map(function(c){
+    return '<button class="m-cat' + (c===curCat?' active':'') + '" onclick="selectCat(\'' + c + '\')">' + c + '</button>';
+  }).join('');
+}
+
+function buildComposeCats() {
+  document.getElementById('cCats').innerHTML = COMPOSE_CATS.map(function(c){
+    return '<button class="c-cat' + (c===cCat?' active':'') + '" onclick="pickCat(\'' + c + '\')">' + c + '</button>';
+  }).join('');
 }
 
 function selectCat(cat) {
-  currentCat = cat;
-  searchQuery = '';
-  document.getElementById('dSearchInput').value = '';
-  if (document.getElementById('mSearchInput')) document.getElementById('mSearchInput').value = '';
+  curCat = cat;
+  query = '';
+  document.getElementById('dSearch').value = '';
+  var ms = document.getElementById('mSearch');
+  if (ms) ms.value = '';
   buildCats();
   renderFeed();
 }
 
-function selectComposeCat(cat) {
-  selectedComposeCat = cat;
-  const composeCats = CATEGORIES.filter(c => c !== '全部' && c !== '公告');
-  document.getElementById('composeCats').innerHTML = composeCats.map(c => `
-    <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
-  `).join('');
+function pickCat(cat) {
+  cCat = cat;
+  buildComposeCats();
 }
 
-// ── 搜尋 ──
 function onSearch() {
-  const dv = document.getElementById('dSearchInput').value;
-  const mv = document.getElementById('mSearchInput') ? document.getElementById('mSearchInput').value : '';
-  searchQuery = dv || mv;
+  var d = document.getElementById('dSearch').value;
+  var m = document.getElementById('mSearch') ? document.getElementById('mSearch').value : '';
+  query = d || m;
   renderFeed();
 }
 
-function toggleMSearch() {
-  mSearchOpen = !mSearchOpen;
-  document.getElementById('mSearchBar').style.display = mSearchOpen ? 'block' : 'none';
+function toggleSearch() {
+  searchOpen = !searchOpen;
+  document.getElementById('mSearchWrap').style.display = searchOpen ? 'block' : 'none';
 }
 
-// ── 通知 ──
-function toggleNotif(type) {
-  notifOpen[type] = !notifOpen[type];
-  const el = document.getElementById(type === 'd' ? 'dNotifDropdown' : 'mNotifDropdown');
-  if (notifOpen[type]) {
-    const notifs = window._pendingNotifs || [];
-    if (!notifs.length) {
-      el.innerHTML = `<div class="notif-item"><div class="notif-text">目前沒有新通知</div></div>`;
-    } else {
-      el.innerHTML = notifs.map(n => `
-        <div class="notif-item" onclick="openPost('${esc(n.postId)}'); toggleNotif('${type}')" style="cursor:pointer">
-          <div class="notif-text">${esc(n.text)}</div>
-          <div class="notif-time">${esc(n.time)}</div>
-        </div>`).join('');
-      // 標記為已讀
-      const s = getNotifStore();
-      if (window._lastPostData) {
-        s.seen = s.seen || {};
-        (s.myPosts||[]).forEach(pid => {
-          if (!s.seen[pid]) s.seen[pid] = 0;
-        });
-      }
-      window._pendingNotifs = [];
-      document.getElementById('dNotifDot').style.display = 'none';
-      document.getElementById('mNotifDot').style.display = 'none';
-      saveNotifStore(s);
-    }
+function filtered() {
+  var list = allPosts;
+  if (curCat !== '全部') list = list.filter(function(p){ return p.category === curCat; });
+  if (query) {
+    var q = query.toLowerCase();
+    list = list.filter(function(p){
+      return (p.title||'').toLowerCase().indexOf(q) >= 0 || (p.content||'').toLowerCase().indexOf(q) >= 0;
+    });
   }
-  el.style.display = notifOpen[type] ? 'block' : 'none';
+  return list;
 }
 
-// ── 載入文章 ──
 async function loadPosts() {
-  const data = await api({ action: 'getPosts' });
+  var data = await api({action:'getPosts'});
   if (!data.success) return;
   allPosts = data.posts;
   renderFeed();
 }
 
-function filteredPosts() {
-  let list = allPosts;
-  if (currentCat !== '全部') list = list.filter(p => p.category === currentCat);
-  if (searchQuery) {
-    const q = searchQuery.toLowerCase();
-    list = list.filter(p =>
-      (p.title||'').toLowerCase().includes(q) ||
-      (p.content||'').toLowerCase().includes(q)
-    );
-  }
-  return list;
+function rowHtml(p, mobile) {
+  var cls = mobile ? 'm-post-row' : 'post-row';
+  var preview = mobile ? '' : '<div class="p-preview">' + esc(p.content||'') + '</div>';
+  return '<div class="' + cls + '" onclick="openPost(\'' + esc(p.id) + '\')">' +
+    '<div class="p-left">' +
+      '<div class="p-meta">' + esc(p.category) + ' · ' + esc(p.author) + '</div>' +
+      '<div class="p-title">' + esc(p.title) + '</div>' +
+      preview +
+    '</div>' +
+    '<div class="p-right">' +
+      '<div class="p-time">' + fmt(p.timestamp) + '</div>' +
+      '<div class="p-cmt">' + (p.replyCount||0) + ' 留言</div>' +
+    '</div>' +
+  '</div>';
 }
 
-// ── 渲染列表 ──
 function renderFeed() {
-  const posts = filteredPosts();
-
-  // 桌面
-  const dInner = document.getElementById('dFeedInner');
-  if (!posts.length) {
-    dInner.innerHTML = '<div class="empty-state">沒有符合的討論</div>';
-  } else {
-    dInner.innerHTML = posts.map(p => `
-      <div class="post-row" onclick="openPost('${esc(p.id)}')">
-        <div class="post-left">
-          <div class="post-tag-author">${esc(p.category)} · ${esc(p.author)}</div>
-          <div class="post-title-text">${esc(p.title)}</div>
-          <div class="post-preview">${esc(p.content||'')}</div>
-        </div>
-        <div class="post-right">
-          <div class="post-time-small">${fmt(p.timestamp)}</div>
-          <div class="post-cmt-count">${p.replyCount||0} 留言</div>
-        </div>
-      </div>`).join('');
-  }
-
-  // 手機
-  const mFeed = document.getElementById('mFeed');
-  if (!posts.length) {
-    mFeed.innerHTML = '<div class="empty-state">沒有符合的討論</div>';
-  } else {
-    mFeed.innerHTML = posts.map(p => `
-      <div class="m-post-row" onclick="openPost('${esc(p.id)}')">
-        <div class="post-left">
-          <div class="post-tag-author">${esc(p.category)} · ${esc(p.author)}</div>
-          <div class="post-title-text">${esc(p.title)}</div>
-        </div>
-        <div class="post-right">
-          <div class="post-time-small">${fmt(p.timestamp)}</div>
-          <div class="post-cmt-count">${p.replyCount||0} 留言</div>
-        </div>
-      </div>`).join('');
-  }
+  var posts = filtered();
+  var empty = '<div class="empty">沒有符合的討論</div>';
+  document.getElementById('dFeedI').innerHTML = posts.length ? posts.map(function(p){ return rowHtml(p,false); }).join('') : empty;
+  document.getElementById('mFeed').innerHTML  = posts.length ? posts.map(function(p){ return rowHtml(p,true);  }).join('') : empty;
 }
 
-// ── 開啟文章 ──
+function cmtHtml(r) {
+  return '<div class="cmt-item" id="cmt_' + r.id + '">' +
+    '<div class="cmt-head">' +
+      '<span class="cmt-author">' + esc(r.author) + '</span>' +
+      '<span class="cmt-time">' + fmt(r.timestamp) + '</span>' +
+      '<button class="cmt-at-btn" onclick="doMention(\'' + esc(r.author) + '\')">＠</button>' +
+      '<button class="cmt-del-btn" onclick="askDelReply(\'' + esc(r.id) + '\')">刪除</button>' +
+    '</div>' +
+    '<div class="cmt-text">' + hl(esc(r.content)) + '</div>' +
+  '</div>';
+}
+
+function detailHtml(post, replies, pfx) {
+  var rHtml = replies.length ? replies.map(cmtHtml).join('') : '<div class="empty" style="padding:20px 0">還沒有留言</div>';
+  return '<div class="detail-wrap">' +
+    '<button class="back-btn" onclick="closeDetail()">← 返回</button>' +
+    '<div style="margin-bottom:6px"><span class="d-tag">' + esc(post.category) + '</span></div>' +
+    '<div class="d-title">' + esc(post.title) + '</div>' +
+    '<div class="d-meta">' +
+      '<span>' + esc(post.author) + ' · ' + fmt(post.timestamp) + '</span>' +
+      '<button class="cmt-del-btn" id="' + pfx + '_delPost" onclick="askDelPost(\'' + esc(post.id) + '\',\'' + pfx + '\')">刪除文章</button>' +
+    '</div>' +
+    '<div class="d-body">' + esc(post.content||'') + '</div>' +
+    '<div class="d-actions"><span class="cmt-total">' + replies.length + ' 則留言</span></div>' +
+    '<div class="cmts-label">留言</div>' +
+    '<div id="' + pfx + '_cmts">' + rHtml + '</div>' +
+    '<div class="d-reply-row">' +
+      '<input id="' + pfx + '_ri" placeholder="以匿名身份留言..." oninput="document.getElementById(\'' + pfx + '_send\').disabled=!this.value.trim()">' +
+      '<button class="send-btn" id="' + pfx + '_send" onclick="sendReply(\'' + pfx + '\')" disabled>送出</button>' +
+    '</div>' +
+  '</div>';
+}
+
 async function openPost(id) {
-  currentPostId = id;
-  showDetailView(true);
-  const data = await api({ action: 'getPost', id });
-  if (!data.success) { showDetailView(false); return; }
-  window._lastPostData = data;
-  const { post, replies } = data;
-  allReplies = replies;
-  renderDetail(post, replies);
-  updateSeenCounts();
-  checkNotifs();
-}
-
-function renderDetail(post, replies) {
-  const html = `
-    <div class="detail-wrap">
-      <button class="back-btn" onclick="closeDetail()">← 返回</button>
-      <div><span class="detail-tag">${esc(post.category)}</span></div>
-      <div class="detail-title">${esc(post.title)}</div>
-      <div class="detail-meta">${esc(post.author)} · ${fmt(post.timestamp)}
-        <button class="comment-del" onclick="confirmDelPost('${esc(post.id)}')" id="delPostBtn">刪除</button>
-      </div>
-      <div class="detail-body">${esc(post.content||'')}</div>
-      <div class="detail-actions">
-        <span class="cmt-total">${replies.length} 則留言</span>
-      </div>
-      <div class="comments-label">留言</div>
-      <div id="commentsList">
-        ${replies.length ? replies.map(r => renderReply(r)).join('') : '<div class="empty-state" style="padding:20px 0">還沒有留言</div>'}
-      </div>
-      <div class="d-reply-bar">
-        <input id="dReplyInput" placeholder="以匿名身份留言..." oninput="onDReplyInput(this)">
-        <button class="reply-send" id="dReplySend" onclick="sendReply()" disabled>送出</button>
-      </div>
-    </div>`;
-
-  document.getElementById('dDetailInner').innerHTML = html;
-  document.getElementById('mDetailInner').innerHTML = html;
-
-  // 手機回覆列
+  curPostId = id;
+  showDetail(true);
+  var data = await api({action:'getPost', id:id});
+  if (!data.success) { showDetail(false); return; }
+  document.getElementById('dDetailI').innerHTML = detailHtml(data.post, data.replies, 'd');
+  document.getElementById('mDetailI').innerHTML = detailHtml(data.post, data.replies, 'm');
   document.getElementById('mReplyBar').style.display = 'flex';
   document.getElementById('mFab').style.display = 'none';
-  document.getElementById('mReplyInput').oninput = function() {
-    document.getElementById('mReplySend').disabled = !this.value.trim();
+  document.getElementById('mReplyI').oninput = function(){
+    document.getElementById('mSend').disabled = !this.value.trim();
   };
 }
 
-function renderReply(r) {
-  return `
-  <div class="comment-item" id="cmt_${r.id}">
-    <div>
-      <span class="comment-author">${esc(r.author)}</span>
-      <span class="comment-time">${fmt(r.timestamp)}</span>
-      <button class="comment-del" onclick="mentionUser('${esc(r.author)}')" style="color:var(--ink-soft)">＠</button>
-      <button class="comment-del" onclick="confirmDelReply('${esc(r.id)}')" id="delR_${r.id}">刪除</button>
-    </div>
-    <div class="comment-text">${esc(r.content)}</div>
-  </div>`;
-}
-
-function mentionUser(author) {
-  const mention = `@${author} `;
-  // 桌面
-  const dInput = document.getElementById('dReplyInput');
-  if (dInput) {
-    const pos = dInput.selectionStart;
-    dInput.value = dInput.value.slice(0, pos) + mention + dInput.value.slice(pos);
-    dInput.focus();
-    dInput.selectionStart = dInput.selectionEnd = pos + mention.length;
-    const dBtn = document.getElementById('dReplySend');
-    if (dBtn) dBtn.disabled = !dInput.value.trim();
-  }
-  // 手機
-  const mInput = document.getElementById('mReplyInput');
-  if (mInput) {
-    const pos = mInput.selectionStart;
-    mInput.value = mInput.value.slice(0, pos) + mention + mInput.value.slice(pos);
-    mInput.focus();
-    mInput.selectionStart = mInput.selectionEnd = pos + mention.length;
-    const mBtn = document.getElementById('mReplySend');
-    if (mBtn) mBtn.disabled = !mInput.value.trim();
-  }
-}
-
-function onDReplyInput(el) {
-  const btn = document.getElementById('dReplySend');
-  if (btn) btn.disabled = !el.value.trim();
-}
-
-function showDetailView(show) {
-  // 桌面
-  document.getElementById('dFeed').style.display = show ? 'none' : 'flex';
+function showDetail(show) {
+  document.getElementById('dFeed').style.display   = show ? 'none' : 'flex';
   document.getElementById('dDetail').style.display = show ? 'flex' : 'none';
-  // 手機
-  document.getElementById('mFeed').style.display = show ? 'none' : 'block';
+  document.getElementById('mFeed').style.display   = show ? 'none' : 'block';
   document.getElementById('mDetail').style.display = show ? 'block' : 'none';
-  document.getElementById('mFab').style.display = show ? 'none' : 'block';
-  document.getElementById('mReplyBar').style.display = show ? 'flex' : 'none';
+  document.getElementById('mFab').style.display    = show ? 'none' : 'block';
+  document.getElementById('mReplyBar').style.display = 'none';
   if (!show) {
-    document.getElementById('mDetailInner').innerHTML = '<div class="loading">載入中…</div>';
-    document.getElementById('dDetailInner').innerHTML = '<div class="loading">載入中…</div>';
+    document.getElementById('dDetailI').innerHTML = '';
+    document.getElementById('mDetailI').innerHTML = '';
   }
 }
 
 function closeDetail() {
-  currentPostId = null;
-  showDetailView(false);
+  curPostId = null;
+  showDetail(false);
   loadPosts();
 }
 
-// ── 通知系統 ──
-// 結構：{ myPosts: [postId,...], seen: { postId: replyCount, ... }, mentions: [{id, postId, author, time},...], seenMentions: [id,...] }
-function getNotifStore() {
-  try { return JSON.parse(localStorage.getItem('virgohi_notif') || '{}'); } catch { return {}; }
-}
-function saveNotifStore(s) { localStorage.setItem('virgohi_notif', JSON.stringify(s)); }
-
-function trackMyPost(postId) {
-  const s = getNotifStore();
-  s.myPosts = [...(s.myPosts||[]), postId];
-  s.seen = s.seen || {};
-  s.seen[postId] = 0;
-  saveNotifStore(s);
+async function refreshCmts() {
+  if (!curPostId) return;
+  var data = await api({action:'getPost', id:curPostId});
+  if (!data.success) return;
+  var html = data.replies.length ? data.replies.map(cmtHtml).join('') : '<div class="empty" style="padding:20px 0">還沒有留言</div>';
+  var dC = document.getElementById('d_cmts');
+  var mC = document.getElementById('m_cmts');
+  if (dC) dC.innerHTML = html;
+  if (mC) mC.innerHTML = html;
 }
 
-function trackMention(replyId, postId, author) {
-  const s = getNotifStore();
-  s.mentions = s.mentions || [];
-  if (!s.mentions.find(m => m.id === replyId)) {
-    s.mentions.push({ id: replyId, postId, author, time: new Date().toISOString() });
-    saveNotifStore(s);
-  }
+async function sendReply(pfx) {
+  var input = document.getElementById(pfx + '_ri');
+  if (!input) return;
+  var content = input.value.trim();
+  if (!content || !curPostId) return;
+  var data = await api({action:'addReply', postId:curPostId, author:anonId, content:content});
+  if (!data.success) return;
+  input.value = '';
+  var send = document.getElementById(pfx + '_send');
+  if (send) send.disabled = true;
+  await refreshCmts();
 }
 
-async function checkNotifs() {
-  const s = getNotifStore();
-  const myPosts = s.myPosts || [];
-  const seen = s.seen || {};
-  const seenMentions = s.seenMentions || [];
-  const notifs = [];
-
-  for (const postId of myPosts) {
-    try {
-      const data = await api({ action: 'getPost', id: postId });
-      if (!data.success) continue;
-      const count = data.replies.length;
-      const prev  = seen[postId] || 0;
-      if (count > prev) {
-        notifs.push({ text: `你的文章「${data.post.title}」有 ${count - prev} 則新留言`, postId, time: '剛剛' });
-      }
-      // 檢查是否有 @ 我
-      data.replies.forEach(r => {
-        if (r.content.includes(`@${anonId}`) && !seenMentions.includes(r.id)) {
-          notifs.push({ text: `${r.author} 在「${data.post.title}」提及了你`, postId, time: fmt(r.timestamp) });
-        }
-      });
-    } catch {}
-  }
-
-  const hasDot = notifs.length > 0;
-  document.getElementById('dNotifDot').style.display = hasDot ? 'block' : 'none';
-  document.getElementById('mNotifDot').style.display = hasDot ? 'block' : 'none';
-
-  // 存通知備用
-  window._pendingNotifs = notifs;
+function doMention(author) {
+  var tag = '@' + author + ' ';
+  var dDetail = document.getElementById('dDetail');
+  var isDesktop = dDetail && dDetail.style.display !== 'none';
+  var pfx = isDesktop ? 'd' : 'm';
+  var input = document.getElementById(pfx + '_ri') || document.getElementById('mReplyI');
+  var sendId = isDesktop ? 'd_send' : 'mSend';
+  if (!input) return;
+  var pos = input.selectionStart !== undefined ? input.selectionStart : input.value.length;
+  input.value = input.value.slice(0,pos) + tag + input.value.slice(pos);
+  input.focus();
+  input.selectionStart = input.selectionEnd = pos + tag.length;
+  var send = document.getElementById(sendId);
+  if (send) send.disabled = !input.value.trim();
 }
 
-function updateSeenCounts() {
-  if (!currentPostId) return;
-  const data_cache = window._lastPostData;
-  if (!data_cache) return;
-  const s = getNotifStore();
-  s.seen = s.seen || {};
-  s.seen[currentPostId] = data_cache.replies.length;
-  // 標記已看的 @ 提及
-  s.seenMentions = s.seenMentions || [];
-  data_cache.replies.forEach(r => {
-    if (r.content.includes(`@${anonId}`) && !s.seenMentions.includes(r.id)) {
-      s.seenMentions.push(r.id);
-    }
-  });
-  saveNotifStore(s);
+function askDelPost(id, pfx) {
+  var el = document.getElementById(pfx + '_delPost');
+  if (!el) return;
+  el.outerHTML = '<span class="del-confirm">確定刪除？' +
+    '<button class="del-yes" onclick="doDelPost(\'' + id + '\')">刪除</button>' +
+    '<button class="del-no" onclick="openPost(\'' + id + '\')">取消</button>' +
+    '</span>';
 }
 
-// ── 回覆 ──
-async function sendReply() {
-  const dInput = document.getElementById('dReplyInput');
-  const mInput = document.getElementById('mReplyInput');
-  const content = (dInput && dInput.value) || (mInput && mInput.value) || '';
-  if (!content.trim() || !currentPostId) return;
-
-  const data = await api({ action: 'addReply', postId: currentPostId, author: anonId, content: content.trim() });
-  if (data.success) {
-    if (dInput) { dInput.value = ''; const b = document.getElementById('dReplySend'); if(b) b.disabled = true; }
-    if (mInput) { mInput.value = ''; document.getElementById('mReplySend').disabled = true; }
-
-    // 重新載入留言，同步更新桌面和手機兩個 commentsList
-    const postData = await api({ action: 'getPost', id: currentPostId });
-    if (postData.success) {
-      window._lastPostData = postData;
-      const html = postData.replies.length
-        ? postData.replies.map(r => renderReply(r)).join('')
-        : '<div class="empty-state" style="padding:20px 0">還沒有留言</div>';
-      // 更新所有 commentsList（桌面和手機共用同一個 innerHTML，renderDetail 會設定兩邊）
-      document.querySelectorAll('#commentsList').forEach(el => el.innerHTML = html);
-      updateSeenCounts();
-    }
-  }
-}
-
-// ── 刪除 ──
-function confirmDelPost(id) {
-  const btn = document.getElementById('delPostBtn');
-  if (btn) btn.outerHTML = `<span class="comment-del-confirm">確定刪除？
-    <button onclick="delPost('${esc(id)}')" style="color:var(--orange);font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;margin-left:4px">刪除</button>
-    <button onclick="loadPosts()" style="color:var(--ink-soft);font-size:11px;border:none;background:none;cursor:pointer;margin-left:4px">取消</button>
-  </span>`;
-}
-
-async function delPost(id) {
-  await api({ action: 'deletePost', id });
+async function doDelPost(id) {
+  await api({action:'deletePost', id:id});
   closeDetail();
 }
 
-function confirmDelReply(id) {
-  const btn = document.getElementById(`delR_${id}`);
-  if (btn) btn.outerHTML = `<span class="comment-del-confirm" id="delConfirm_${id}">確定？
-    <button onclick="delReply('${esc(id)}')" style="color:var(--orange);font-size:11px;font-weight:700;border:none;background:none;cursor:pointer;margin-left:4px">刪除</button>
-    <button onclick="cancelDelReply('${esc(id)}')" style="color:var(--ink-soft);font-size:11px;border:none;background:none;cursor:pointer;margin-left:4px">取消</button>
-  </span>`;
+function askDelReply(id) {
+  var el = document.querySelector('[onclick="askDelReply(\'' + id + '\')"]');
+  if (!el) return;
+  el.outerHTML = '<span class="del-confirm" id="dc_' + id + '">確定？' +
+    '<button class="del-yes" onclick="doDelReply(\'' + id + '\')">刪除</button>' +
+    '<button class="del-no" onclick="cancelDelReply(\'' + id + '\')">取消</button>' +
+    '</span>';
 }
 
-async function cancelDelReply(id) {
-  const span = document.getElementById(`delConfirm_${id}`);
-  if (span) span.outerHTML = `<button class="comment-del" onclick="confirmDelReply('${esc(id)}')" id="delR_${id}">刪除</button>`;
+function cancelDelReply(id) {
+  var el = document.getElementById('dc_' + id);
+  if (el) el.outerHTML = '<button class="cmt-del-btn" onclick="askDelReply(\'' + id + '\')">刪除</button>';
 }
 
-async function delReply(id) {
-  await api({ action: 'deleteReply', id });
-  const el = document.getElementById(`cmt_${id}`);
+async function doDelReply(id) {
+  await api({action:'deleteReply', id:id});
+  var el = document.getElementById('cmt_' + id);
   if (el) el.remove();
 }
 
-// ── 發文 ──
 function openCompose() {
-  selectedComposeCat = '綜合';
-  document.getElementById('composeTitleInput').value = '';
-  document.getElementById('composeBodyInput').value = '';
-  document.getElementById('composeSubmit').disabled = true;
-  buildCats();
+  cCat = '綜合';
+  document.getElementById('cTitle').value = '';
+  document.getElementById('cBody').value = '';
+  document.getElementById('cOk').disabled = true;
+  buildComposeCats();
   document.getElementById('composeOverlay').style.display = 'flex';
 }
 
@@ -1089,44 +653,26 @@ function closeCompose() {
   document.getElementById('composeOverlay').style.display = 'none';
 }
 
-function onOverlayClick(e) {
-  if (e.target === document.getElementById('composeOverlay')) closeCompose();
-}
-
-function onComposeInput() {
-  const title = document.getElementById('composeTitleInput').value.trim();
-  const body  = document.getElementById('composeBodyInput').value.trim();
-  document.getElementById('composeSubmit').disabled = !(title && body);
+function checkCompose() {
+  var t = document.getElementById('cTitle').value.trim();
+  var b = document.getElementById('cBody').value.trim();
+  document.getElementById('cOk').disabled = !(t && b);
 }
 
 async function submitPost() {
-  const title   = document.getElementById('composeTitleInput').value.trim();
-  const content = document.getElementById('composeBodyInput').value.trim();
-  const btn = document.getElementById('composeSubmit');
+  var title   = document.getElementById('cTitle').value.trim();
+  var content = document.getElementById('cBody').value.trim();
   if (!title || !content) return;
-  btn.disabled = true;
-  btn.textContent = '發布中…';
-  const data = await api({
-    action: 'addPost',
-    author: anonId,
-    title, content,
-    category: selectedComposeCat,
-    tags: ''
-  });
+  var btn = document.getElementById('cOk');
+  btn.disabled = true; btn.textContent = '發布中…';
+  var data = await api({action:'addPost', author:anonId, title:title, content:content, category:cCat, tags:''});
   btn.textContent = '發布';
-  if (data.success) {
-    trackMyPost(data.id);
-    closeCompose();
-    await loadPosts();
-  } else {
-    btn.disabled = false;
-  }
+  if (data.success) { closeCompose(); await loadPosts(); }
+  else btn.disabled = false;
 }
 
-// ── 啟動 ──
 buildCats();
 loadPosts();
-checkNotifs();
 </script>
 </body>
 </html>
