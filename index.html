@@ -651,7 +651,7 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
-const CATEGORIES = ['全部', '公告', '創作', '討論', '綜合'];
+const CATEGORIES = ['全部', '綜合', '創作', '討論', '公告'];
 
 // ── 狀態 ──
 let allPosts = [];
@@ -861,10 +861,35 @@ function renderReply(r) {
     <div>
       <span class="comment-author">${esc(r.author)}</span>
       <span class="comment-time">${fmt(r.timestamp)}</span>
+      <button class="comment-del" onclick="mentionUser('${esc(r.author)}')" style="color:var(--ink-soft)">＠</button>
       <button class="comment-del" onclick="confirmDelReply('${esc(r.id)}')" id="delR_${r.id}">刪除</button>
     </div>
     <div class="comment-text">${esc(r.content)}</div>
   </div>`;
+}
+
+function mentionUser(author) {
+  const mention = `@${author} `;
+  // 桌面
+  const dInput = document.getElementById('dReplyInput');
+  if (dInput) {
+    const pos = dInput.selectionStart;
+    dInput.value = dInput.value.slice(0, pos) + mention + dInput.value.slice(pos);
+    dInput.focus();
+    dInput.selectionStart = dInput.selectionEnd = pos + mention.length;
+    const dBtn = document.getElementById('dReplySend');
+    if (dBtn) dBtn.disabled = !dInput.value.trim();
+  }
+  // 手機
+  const mInput = document.getElementById('mReplyInput');
+  if (mInput) {
+    const pos = mInput.selectionStart;
+    mInput.value = mInput.value.slice(0, pos) + mention + mInput.value.slice(pos);
+    mInput.focus();
+    mInput.selectionStart = mInput.selectionEnd = pos + mention.length;
+    const mBtn = document.getElementById('mReplySend');
+    if (mBtn) mBtn.disabled = !mInput.value.trim();
+  }
 }
 
 function onDReplyInput(el) {
