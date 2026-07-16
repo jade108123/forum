@@ -701,7 +701,7 @@ function buildCats() {
     <button class="m-cat${c===currentCat?' active':''}" onclick="selectCat('${esc(c)}')">${esc(c)}</button>
   `).join('');
   // 發文分類
-  const composeCats = CATEGORIES.filter(c => c !== '全部');
+  const composeCats = CATEGORIES.filter(c => c !== '全部' && c !== '公告');
   document.getElementById('composeCats').innerHTML = composeCats.map(c => `
     <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
   `).join('');
@@ -718,7 +718,7 @@ function selectCat(cat) {
 
 function selectComposeCat(cat) {
   selectedComposeCat = cat;
-  const composeCats = CATEGORIES.filter(c => c !== '全部');
+  const composeCats = CATEGORIES.filter(c => c !== '全部' && c !== '公告');
   document.getElementById('composeCats').innerHTML = composeCats.map(c => `
     <button class="compose-cat${c===selectedComposeCat?' active':''}" onclick="selectComposeCat('${esc(c)}')">${esc(c)}</button>
   `).join('');
