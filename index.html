@@ -742,7 +742,28 @@ function toggleNotif(type) {
   notifOpen[type] = !notifOpen[type];
   const el = document.getElementById(type === 'd' ? 'dNotifDropdown' : 'mNotifDropdown');
   if (notifOpen[type]) {
-    el.innerHTML = `<div class="notif-item"><div class="notif-text">目前沒有新通知</div></div>`;
+    const notifs = window._pendingNotifs || [];
+    if (!notifs.length) {
+      el.innerHTML = `<div class="notif-item"><div class="notif-text">目前沒有新通知</div></div>`;
+    } else {
+      el.innerHTML = notifs.map(n => `
+        <div class="notif-item" onclick="openPost('${esc(n.postId)}'); toggleNotif('${type}')" style="cursor:pointer">
+          <div class="notif-text">${esc(n.text)}</div>
+          <div class="notif-time">${esc(n.time)}</div>
+        </div>`).join('');
+      // 標記為已讀
+      const s = getNotifStore();
+      if (window._lastPostData) {
+        s.seen = s.seen || {};
+        (s.myPosts||[]).forEach(pid => {
+          if (!s.seen[pid]) s.seen[pid] = 0;
+        });
+      }
+      window._pendingNotifs = [];
+      document.getElementById('dNotifDot').style.display = 'none';
+      document.getElementById('mNotifDot').style.display = 'none';
+      saveNotifStore(s);
+    }
   }
   el.style.display = notifOpen[type] ? 'block' : 'none';
 }
@@ -816,9 +837,12 @@ async function openPost(id) {
   showDetailView(true);
   const data = await api({ action: 'getPost', id });
   if (!data.success) { showDetailView(false); return; }
+  window._lastPostData = data;
   const { post, replies } = data;
   allReplies = replies;
   renderDetail(post, replies);
+  updateSeenCounts();
+  checkNotifs();
 }
 
 function renderDetail(post, replies) {
@@ -918,27 +942,102 @@ function closeDetail() {
   loadPosts();
 }
 
+// ── 通知系統 ──
+// 結構：{ myPosts: [postId,...], seen: { postId: replyCount, ... }, mentions: [{id, postId, author, time},...], seenMentions: [id,...] }
+function getNotifStore() {
+  try { return JSON.parse(localStorage.getItem('virgohi_notif') || '{}'); } catch { return {}; }
+}
+function saveNotifStore(s) { localStorage.setItem('virgohi_notif', JSON.stringify(s)); }
+
+function trackMyPost(postId) {
+  const s = getNotifStore();
+  s.myPosts = [...(s.myPosts||[]), postId];
+  s.seen = s.seen || {};
+  s.seen[postId] = 0;
+  saveNotifStore(s);
+}
+
+function trackMention(replyId, postId, author) {
+  const s = getNotifStore();
+  s.mentions = s.mentions || [];
+  if (!s.mentions.find(m => m.id === replyId)) {
+    s.mentions.push({ id: replyId, postId, author, time: new Date().toISOString() });
+    saveNotifStore(s);
+  }
+}
+
+async function checkNotifs() {
+  const s = getNotifStore();
+  const myPosts = s.myPosts || [];
+  const seen = s.seen || {};
+  const seenMentions = s.seenMentions || [];
+  const notifs = [];
+
+  for (const postId of myPosts) {
+    try {
+      const data = await api({ action: 'getPost', id: postId });
+      if (!data.success) continue;
+      const count = data.replies.length;
+      const prev  = seen[postId] || 0;
+      if (count > prev) {
+        notifs.push({ text: `你的文章「${data.post.title}」有 ${count - prev} 則新留言`, postId, time: '剛剛' });
+      }
+      // 檢查是否有 @ 我
+      data.replies.forEach(r => {
+        if (r.content.includes(`@${anonId}`) && !seenMentions.includes(r.id)) {
+          notifs.push({ text: `${r.author} 在「${data.post.title}」提及了你`, postId, time: fmt(r.timestamp) });
+        }
+      });
+    } catch {}
+  }
+
+  const hasDot = notifs.length > 0;
+  document.getElementById('dNotifDot').style.display = hasDot ? 'block' : 'none';
+  document.getElementById('mNotifDot').style.display = hasDot ? 'block' : 'none';
+
+  // 存通知備用
+  window._pendingNotifs = notifs;
+}
+
+function updateSeenCounts() {
+  if (!currentPostId) return;
+  const data_cache = window._lastPostData;
+  if (!data_cache) return;
+  const s = getNotifStore();
+  s.seen = s.seen || {};
+  s.seen[currentPostId] = data_cache.replies.length;
+  // 標記已看的 @ 提及
+  s.seenMentions = s.seenMentions || [];
+  data_cache.replies.forEach(r => {
+    if (r.content.includes(`@${anonId}`) && !s.seenMentions.includes(r.id)) {
+      s.seenMentions.push(r.id);
+    }
+  });
+  saveNotifStore(s);
+}
+
 // ── 回覆 ──
 async function sendReply() {
   const dInput = document.getElementById('dReplyInput');
   const mInput = document.getElementById('mReplyInput');
-  const content = (dInput ? dInput.value : '') || (mInput ? mInput.value : '');
+  const content = (dInput && dInput.value) || (mInput && mInput.value) || '';
   if (!content.trim() || !currentPostId) return;
 
   const data = await api({ action: 'addReply', postId: currentPostId, author: anonId, content: content.trim() });
   if (data.success) {
-    if (dInput) dInput.value = '';
-    if (mInput) mInput.value = '';
-    document.getElementById('mReplySend').disabled = true;
-    const dBtn = document.getElementById('dReplySend');
-    if (dBtn) dBtn.disabled = true;
-    // 重新載入留言
+    if (dInput) { dInput.value = ''; const b = document.getElementById('dReplySend'); if(b) b.disabled = true; }
+    if (mInput) { mInput.value = ''; document.getElementById('mReplySend').disabled = true; }
+
+    // 重新載入留言，同步更新桌面和手機兩個 commentsList
     const postData = await api({ action: 'getPost', id: currentPostId });
     if (postData.success) {
-      const list = document.getElementById('commentsList');
-      if (list) list.innerHTML = postData.replies.length
+      window._lastPostData = postData;
+      const html = postData.replies.length
         ? postData.replies.map(r => renderReply(r)).join('')
         : '<div class="empty-state" style="padding:20px 0">還沒有留言</div>';
+      // 更新所有 commentsList（桌面和手機共用同一個 innerHTML，renderDetail 會設定兩邊）
+      document.querySelectorAll('#commentsList').forEach(el => el.innerHTML = html);
+      updateSeenCounts();
     }
   }
 }
@@ -1016,6 +1115,7 @@ async function submitPost() {
   });
   btn.textContent = '發布';
   if (data.success) {
+    trackMyPost(data.id);
     closeCompose();
     await loadPosts();
   } else {
@@ -1026,6 +1126,7 @@ async function submitPost() {
 // ── 啟動 ──
 buildCats();
 loadPosts();
+checkNotifs();
 </script>
 </body>
 </html>
