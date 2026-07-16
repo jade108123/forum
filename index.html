@@ -380,7 +380,7 @@ input, textarea { font-family: 'Noto Sans TC', sans-serif; }
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqBEaCvBtipmcjlOTZJgNRBLpzZ7eQxnq0onIe7Bw-SsIb0vRuDPm9bBCsu_1lfA/exec';
-const ALL_CATS     = ['全部','公告','創作','討論','綜合'];
+const ALL_CATS     = ['全部','公告','綜合','創作','討論'];
 const COMPOSE_CATS = ['綜合','創作','討論'];
 
 let allPosts = [];
@@ -526,10 +526,12 @@ function detailHtml(post, replies, pfx) {
     '<div class="d-actions"><span class="cmt-total">' + replies.length + ' 則留言</span></div>' +
     '<div class="cmts-label">留言</div>' +
     '<div id="' + pfx + '_cmts">' + rHtml + '</div>' +
-    '<div class="d-reply-row">' +
-      '<input id="' + pfx + '_ri" placeholder="以匿名身份留言..." oninput="document.getElementById(\'' + pfx + '_send\').disabled=!this.value.trim()">' +
-      '<button class="send-btn" id="' + pfx + '_send" onclick="sendReply(\'' + pfx + '\')" disabled>送出</button>' +
-    '</div>' +
+    (pfx === 'd' ?
+      '<div class="d-reply-row">' +
+        '<input id="d_ri" placeholder="以匿名身份留言..." oninput="document.getElementById(\'d_send\').disabled=!this.value.trim()">' +
+        '<button class="send-btn" id="d_send" onclick="sendReply(\'d\')" disabled>送出</button>' +
+      '</div>'
+    : '') +
   '</div>';
 }
 
@@ -578,14 +580,16 @@ async function refreshCmts() {
 }
 
 async function sendReply(pfx) {
-  var input = document.getElementById(pfx + '_ri');
+  var inputId = pfx === 'm' ? 'mReplyI' : 'd_ri';
+  var input = document.getElementById(inputId);
   if (!input) return;
   var content = input.value.trim();
   if (!content || !curPostId) return;
   var data = await api({action:'addReply', postId:curPostId, author:anonId, content:content});
   if (!data.success) return;
   input.value = '';
-  var send = document.getElementById(pfx + '_send');
+  var sendId = pfx === 'm' ? 'mSend' : 'd_send';
+  var send = document.getElementById(sendId);
   if (send) send.disabled = true;
   await refreshCmts();
 }
@@ -594,9 +598,9 @@ function doMention(author) {
   var tag = '@' + author + ' ';
   var dDetail = document.getElementById('dDetail');
   var isDesktop = dDetail && dDetail.style.display !== 'none';
-  var pfx = isDesktop ? 'd' : 'm';
-  var input = document.getElementById(pfx + '_ri') || document.getElementById('mReplyI');
-  var sendId = isDesktop ? 'd_send' : 'mSend';
+  var inputId = isDesktop ? 'd_ri' : 'mReplyI';
+  var sendId  = isDesktop ? 'd_send' : 'mSend';
+  var input = document.getElementById(inputId);
   if (!input) return;
   var pos = input.selectionStart !== undefined ? input.selectionStart : input.value.length;
   input.value = input.value.slice(0,pos) + tag + input.value.slice(pos);
